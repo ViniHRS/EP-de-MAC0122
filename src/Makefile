@@ -11,7 +11,7 @@
 # CFLAGS = -std=c99 -g -Wall -pedantic -O2 -lm -fsanitize=address
 # CFLAGS = -std=c99 -g -Wall -pedantic -lm -fsanitize=address
 # CFLAGS = -std=c99 -g -Wall -pedantic -O2 -lm 
-CFLAGS = -std=c99 -Wall -pedantic -O2 -lm 
+CFLAGS = -std=c99 -Wall -pedantic -O2 -lm -g -D_GNU_SOURCE
 
 RM = /bin/rm -f
 CC = gcc

@@ -11,7 +11,7 @@
 #define BODY(attributes) SCOPE(fprintf(fp, "<body %s>", attributes), fputs("</body>", fp))
 
 // Head
-#define TITLE(text) fprintf(fp, "<title>%s</title", text)
+#define TITLE(text) fprintf(fp, "<title>%s</title>", text)
 #define META(attributes) fprintf(fp, "<meta %s>", attributes)
 #define BASE(attributes) fprintf(fp, "<base %s>", attributes)
 #define LINK(attributes) fprintf(fp, "<link %s>", attributes)
@@ -51,9 +51,9 @@
 #define MARK(text) fprintf(fp, "<mark>%s</mark>", text)
 
 // List
-#define OL(attributes) SCOPE(fprints(fp, "<ol %s>", attributes), fputs("</ol>", fp))
-#define UL(attributes) SCOPE(fprints(fp, "<ul %s>", attributes), fputs("</ul>", fp))
-#define LI(attributes) SCOPE(fprints(fp, "<li %s>", attributes), fputs("</li>", fp))
+#define OL(attributes) SCOPE(fprintf(fp, "<ol %s>", attributes), fputs("</ol>", fp))
+#define UL(attributes) SCOPE(fprintf(fp, "<ul %s>", attributes), fputs("</ul>", fp))
+#define LI(attributes) SCOPE(fprintf(fp, "<li %s>", attributes), fputs("</li>", fp))
 
 // Table
 #define TABLE(attributes) SCOPE(fprintf(fp, "<table %s>", attributes), fputs("</table>", fp))
@@ -68,7 +68,10 @@
 #define A(href, content) fprintf(fp, "<a href='%s'>%s</a>", href, content) 
 
 // Hidden Content
-#define DETAILS() SCOPE(fputs("<details>", fp), fputs("</details>"))
+#define DETAILS() SCOPE(fputs("<details>", fp), fputs("</details>", fp))
 #define SUMMARY(attributes, content) fprintf(fp, "<summary %s>%s</summary>", attributes, content)
+
+// CSS Generator
+#define CSS(id) SCOPE(fprintf(fp, "%s {", id), fputs("}", fp))
 
 #endif

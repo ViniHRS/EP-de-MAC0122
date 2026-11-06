@@ -20,3 +20,5 @@ output/
 # Arquivos de configuração de editores
 .vscode/
 .idea/
+
+./src/gerador_html
