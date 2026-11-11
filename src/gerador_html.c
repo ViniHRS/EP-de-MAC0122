@@ -58,20 +58,18 @@ void main_page_html(FILE *fp)
 
 
 int main(void) {
-    FILE *css_fp = fopen("../generated/style.css", "w");
+    FILE *css_fp = fopen("generated/style.css", "w");
     if (css_fp == NULL) {
         perror("Erro ao criar o style.css");
         return 1;
     }
 
-    FILE *html_fp = fopen("../generated/main.html", "w");
+    FILE *html_fp = fopen("generated/main.html", "w");
     if (html_fp == NULL) {
         perror("Erro ao criar o main.html");
         fclose(css_fp);
         return 1;
     }
-
-    
 
     style_css(css_fp);
     main_page_html(html_fp);
