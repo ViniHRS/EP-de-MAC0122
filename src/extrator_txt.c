@@ -1,16 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-typedef struct {
-    char *tecnica;
-    char *algoritmo;
-    char *autores;
-    char *data;
-    char *conceitos;
-    char *problema;
-    char *solucao;
-} DadosTXT;
+#include "extrator_txt.h"
 
 char* limpar_string(char *str) {
     str[strcspn(str, "\r\n")] = '\0';
@@ -55,44 +43,4 @@ void processar_linha_txt(const char *linha, DadosTXT *dados) {
     else {
         anexar_solucao(&(dados->solucao), linha);
     }
-}
-
-int main() {
-    FILE *ficheiro = fopen("BFS.txt", "r");
-    if (!ficheiro) {
-        printf("Erro ao abrir o ficheiro de entrada.\n");
-        return 1;
-    }
-
-    DadosTXT meu_ep = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-    char buffer[512];
-
-    // Lê o ficheiro linha a linha
-    while (fgets(buffer, sizeof(buffer), ficheiro) != NULL) {
-        limpar_string(buffer);
-        processar_linha_txt(buffer, &meu_ep);
-    }
-
-    fclose(ficheiro);
-
-    // Exibindo os dados extraídos para confirmação
-    printf("--- Dados Extraídos do EP ---\n");
-    printf("Técnica:   %s\n", meu_ep.tecnica ? meu_ep.tecnica : "N/D");
-    printf("Algoritmo: %s\n", meu_ep.algoritmo ? meu_ep.algoritmo : "N/D");
-    printf("Autores:   %s\n", meu_ep.autores ? meu_ep.autores : "N/D");
-    printf("Data:      %s\n", meu_ep.data ? meu_ep.data : "N/D");
-    printf("Conceitos: %s\n", meu_ep.conceitos ? meu_ep.conceitos : "N/D");
-    printf("Problema:  %s\n", meu_ep.problema ? meu_ep.problema : "N/D");
-    printf("Solução:   \n%s\n", meu_ep.solucao ? meu_ep.solucao : "N/D");
-
-    // Libertar a memória alocada pelo strdup
-    free(meu_ep.tecnica);
-    free(meu_ep.algoritmo);
-    free(meu_ep.autores);
-    free(meu_ep.data);
-    free(meu_ep.conceitos);
-    free(meu_ep.problema);
-    free(meu_ep.solucao);
-
-    return 0;
 }

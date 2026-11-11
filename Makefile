@@ -1,58 +1,73 @@
 # ***************************************************************
 #
-# Makefile genérico para compilar programas em C
-# usando o compilador gcc
+# Makefile para o projeto Gerador de Páginas HTML de MAC0122
 #
 # ***************************************************************
 
-# CFLAGS = -Wall -ansi -pedantic -O2 -lm
-# CFLAGS = -Wall -std=c99 -pedantic -O2 -lm
-# CFLAGS = -Wall -std=c99 -pedantic -O2 -lm -fsanitize=address,undefined
-# CFLAGS = -std=c99 -g -Wall -pedantic -O2 -lm -fsanitize=address
-# CFLAGS = -std=c99 -g -Wall -pedantic -lm -fsanitize=address
-# CFLAGS = -std=c99 -g -Wall -pedantic -O2 -lm 
-CFLAGS = -std=c99 -Wall -pedantic -O2 -lm -g -D_GNU_SOURCE
-
-RM = /bin/rm -f
-CC = gcc
-# CC = clang
-
-#Variável para o diretório dos arquivos fonte
+#Variável de diretório
 SRCDIR = src
-#Variável para os arquivos gerados na compilação
+INCDIR = inc
 OUTDIR = output
+GENDIR = generated
 
-# Impede que o Make apague os executáveis automaticamente (arquivos intermediários)
+#Nome do executável final:
+EXEC = gerador_html
+
+#Busca todos os arquivos .c na pasta src e define os correspondentes .o na pasta output
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $(SRCS))
+
+#Impede que o Make apague arquivos .o quando os trata como temporários
 .PRECIOUS: $(OUTDIR)/%
 
+#Coleta todos os arquivos .h da pasta inc automaticamente
+HEADERS = $(wildcard $(INCDIR)/*.h)
+
+#Compilador e Flags
+RM = /bin/rm -f
+CC = gcc
+CFLAGS = -std=c99 -Wall -pedantic -O2 -lm -g -D_GNU_SOURCE -I$(INCDIR)
+
 # ***************************************************************
 
-#Regra principal: O executável em output/ depende do .c em src/
-$(OUTDIR)/% : $(SRCDIR)/%.c
+#Declara alvos que não são arquivos reais
+.PHONY: all page run-page clean clean_all
+
+# Alvo padrão executado ao digitar apenas "make"
+all: page
+
+# ***************************************************************
+# Regra de Compilação
+# ***************************************************************
+$(OUTDIR)/% : $(SRCDIR)/%.c $(HEADERS)
 	@mkdir -p $(OUTDIR)
+	@mkdir -p $(GENDIR)
 	$(CC) $< -o $@ $(CFLAGS)
 
-#Regra de atalho: Permite digitar apenas "make programa" em vez de "make output/programa"
-% : $(OUTDIR)/%
-	@
-#Apenas força a dependência, não executa nada extra
-
+# ***************************************************************
+# Alvos de compilação e execução
 # ***************************************************************
 
-# Declara que clean não é um arquivo
-.PHONY: clean clean_all
+# make page: compila o projeto
+page: $(OUTDIR)/$(EXEC)
+
+# make run-page: compila (se necessário) e executa
+run-page: page
+	./$(OUTDIR)/$(EXEC)
+
+# ***************************************************************
+# Regras de Limpeza
+# ***************************************************************
 
 clean:
-	$(RM) -r *~ \#* .\#* *.o core a.out
-	$(RM) -r $(SRCDIR)/*~ $(SRCDIR)/\#* $(SRCDIR)/.\#* $(SRCDIR)/*.o
+	#Limpa arquivos temporários de editores
+	$(RM) -r *~ \#* .\#* core a.out
+	$(RM) -r $(SRCDIR)/*~ $(SRCDIR)/\#* $(SRCDIR)/.\#*
+	$(RM) -r $(INCDIR)/*~ $(INCDIR)/\#* $(INCDIR)/.\#*
 	$(RM) -rf *.dSYM
+	# Limpa os arquivos objeto (.o) gerados na pasta output
+	$(RM) -f $(OUTDIR)/*.o
 
-#Limpeza total: roda o "clean" e depois apaga a pasta output
 clean_all: clean
+		   #Limpeza total (apaga a pasta output)
 	       $(RM) -rf $(OUTDIR)
-
-# ***************************************************************
-
-# Executa qualquer programa compilado
-run-%: $(OUTDIR)/%
-	./$<

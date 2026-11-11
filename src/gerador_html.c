@@ -40,16 +40,16 @@ void main_page_html(FILE *fp)
                 {
                     H2("style='color: blue'") 
                     {
-                        _("Texto para virar h2");
+                        _("Página de MAC0122 - Princípios de Desenvolvimento de Algoritmos");
                     }
                 }
                 MAIN()
                 {
-                    H2("")
+                    H3("")
                     {
-                        _("Vou Escrever aqui");
+                        _("Para procurar um algoritmo, navegue por uma das 6 categorias abaixo");
                     }
-                    P("Mais um pouco");
+                    P("...");
                 }
             }
         }
@@ -64,9 +64,9 @@ int main(void) {
         return 1;
     }
 
-    FILE *html_fp = fopen("generated/main.html", "w");
+    FILE *html_fp = fopen("generated/index.html", "w");
     if (html_fp == NULL) {
-        perror("Erro ao criar o main.html");
+        perror("Erro ao criar o index.html");
         fclose(css_fp);
         return 1;
     }
@@ -77,7 +77,7 @@ int main(void) {
     fclose(css_fp);
     fclose(html_fp);
 
-    printf("Ficheiros 'style.css' e 'main.html' gerados com sucesso diretamente no disco!\n");
+    printf("Ficheiros 'style.css' e 'index.html' gerados com sucesso diretamente no disco!\n");
 
     return 0;
 }
