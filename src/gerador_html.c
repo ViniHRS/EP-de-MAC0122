@@ -6,9 +6,9 @@
 void style_css(FILE *fp)
 {
     {
-        CSS("main")
+        CSS("body")
         {
-            _("background-color: #e2e2e2");
+            _("background-color: #f2f2f2");
         }
     }
 }
@@ -57,47 +57,28 @@ void main_page_html(FILE *fp)
 }
 
 
-int main(void) 
-{
-    char *css;
-    char *html;
-    size_t css_size;
-    size_t html_size;
-    FILE *css_fp;
-    FILE *html_fp;
-    css_fp = open_memstream(&css, &css_size);
-    if (css_fp == NULL) 
-    {
+int main(void) {
+    FILE *css_fp = fopen("../generated/style.css", "w");
+    if (css_fp == NULL) {
+        perror("Erro ao criar o style.css");
         return 1;
     }
-    html_fp = open_memstream(&html, &html_size);
-    if (html_fp == NULL) 
-    {
+
+    FILE *html_fp = fopen("../generated/main.html", "w");
+    if (html_fp == NULL) {
+        perror("Erro ao criar o main.html");
+        fclose(css_fp);
         return 1;
     }
+
+    
     style_css(css_fp);
     main_page_html(html_fp);
+
     fclose(css_fp);
     fclose(html_fp);
-    FILE *css_f_out = fopen("../generated/style.css", "w");
-    FILE *html_f_out = fopen("../generated/main.html", "w");
-    if (css_f_out != NULL) {
-        fwrite(css, 1, css_size, css_f_out);
-        fclose(css_f_out);
-        printf("Ficheiro 'style.css' gerado com sucesso (%lu bytes)!\n", css_size);
-    } else {
-        perror("Erro ao criar o style.css no disco");
-    }
-    if (html_f_out != NULL) {
-        fwrite(html, 1, html_size, html_f_out);
-        fclose(html_f_out);
-        printf("Ficheiro 'main.html' gerado com sucesso (%lu bytes)!\n", html_size);
-    } else {
-        perror("Erro ao criar o main.html no disco");
-    }
-    printf("%s: %lu bytes\n", css, css_size);
-    printf("%s: %lu bytes\n", html, html_size);
-    free(css);
-    free(html);
+
+    printf("Ficheiros 'style.css' e 'main.html' gerados com sucesso diretamente no disco!\n");
+
     return 0;
 }
