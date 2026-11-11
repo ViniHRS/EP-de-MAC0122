@@ -72,6 +72,7 @@ int main(void) {
     }
 
     
+
     style_css(css_fp);
     main_page_html(html_fp);
 
