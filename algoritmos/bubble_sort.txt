@@ -4,4 +4,22 @@
 4. Data:
 5. Conceitos: vetores, ordenação, comparação, trocas adjacentes, passagens
 6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
-7. Explicação: O Bubble Sort é um algoritmo de ordenação que organiza os elementos de um conjunto por meio de comparações sucessivas entre elementos adjacentes. Durante cada passagem pelo conjunto, compara dois elementos consecutivos e realiza uma troca caso estejam em uma ordem diferente daquela desejada. Como consequência, os maiores elementos tendem a se deslocar progressivamente para o final do conjunto quando a ordenação é crescente, de maneira semelhante a bolhas que sobem até a superfície. Após cada passagem, pelo menos um elemento alcança sua posição definitiva. O processo é repetido até que todos os elementos estejam ordenados. Uma implementação pode utilizar uma variável de controle para identificar se houve alguma troca durante a passagem, encerrando antecipadamente o algoritmo caso nenhuma alteração seja necessária. Apesar de sua simplicidade, apresenta desempenho pouco eficiente para conjuntos grandes, principalmente devido à quantidade de comparações e movimentações realizadas.
+7. Explicação: O Bubble Sort é um algoritmo de ordenação que organiza os elementos de um conjunto por meio de comparações sucessivas entre elementos adjacentes. Durante cada passagem pelo conjunto, compara dois elementos consecutivos e realiza uma troca caso estejam em uma ordem diferente daquela desejada. Como consequência, os maiores elementos tendem a se deslocar progressivamente para o final do conjunto quando a ordenação é crescente, de maneira semelhante a bolhas que sobem até a superfície.
+Após cada passagem, pelo menos um elemento alcança sua posição definitiva. O processo é repetido até que todos os elementos estejam ordenados. Uma implementação pode utilizar uma variável de controle para identificar se houve alguma troca durante a passagem, encerrando antecipadamente o algoritmo caso nenhuma alteração seja necessária. Apesar de sua simplicidade, apresenta desempenho pouco eficiente para conjuntos grandes, principalmente devido à quantidade de comparações e movimentações realizadas.
+8. Código:void bubble_sort(int N, int A[]) {
+    for (int i = 0; i < N; i++) {
+        int is_swapped = 0;
+
+        for (int j = 0; j < N-i-1; j++) {
+            if (A[j] > A[j+1]) {
+                int change = A[j];
+                A[j] = A[j+1];
+                A[j+1] = change;
+                is_swapped = 1;
+            }
+        }
+        if (!is_swapped) {
+            break;
+        }
+    }
+}

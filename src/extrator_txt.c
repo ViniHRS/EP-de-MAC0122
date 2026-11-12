@@ -109,21 +109,27 @@ void processar_linha_txt(const char *linha, DadosTXT *dados)
 
     if (extrair_campo(texto, "1. Técnica:", &valor) ||
         extrair_campo(texto, "1. Tecnica:", &valor)) {
+        dados->estado_leitura = 0;
         substituir_texto(&dados->tecnica, valor);
     }
     else if (extrair_campo(texto, "2. Algoritmo:", &valor)) {
+        dados->estado_leitura = 0;
         substituir_texto(&dados->algoritmo, valor);
     }
     else if (extrair_campo(texto, "3. Autores:", &valor)) {
+        dados->estado_leitura = 0;
         substituir_texto(&dados->autores, valor);
     }
     else if (extrair_campo(texto, "4. Data:", &valor)) {
+        dados->estado_leitura = 0;
         substituir_texto(&dados->data, valor);
     }
     else if (extrair_campo(texto, "5. Conceitos:", &valor)) {
+        dados->estado_leitura = 0;
         substituir_texto(&dados->conceitos, valor);
     }
     else if (extrair_campo(texto, "6. Problema:", &valor)) {
+        dados->estado_leitura = 0;
         substituir_texto(&dados->problema, valor);
     }
     else if (extrair_campo(texto, "7. Explicação:", &valor) ||
@@ -134,13 +140,26 @@ void processar_linha_txt(const char *linha, DadosTXT *dados)
              extrair_campo(texto, "Explicacao:", &valor) ||
              extrair_campo(texto, "Solução:", &valor) ||
              extrair_campo(texto, "Solucao:", &valor)) {
+        dados->estado_leitura = 1;
         char *texto_aparado = duplicar_aparado(valor);
         if (texto_aparado != NULL) {
             anexar_solucao(&dados->solucao, texto_aparado);
             free(texto_aparado);
         }
     }
-    else if (dados->problema != NULL) {
+    else if (extrair_campo(texto, "8. Código:", &valor) || extrair_campo(texto, "8. Codigo:", &valor)) {
+        dados->estado_leitura = 2; // Entramos no modo Código
+        char *texto_aparado = duplicar_aparado(valor);
+        if (texto_aparado != NULL) {
+            anexar_solucao(&dados->codigo, texto_aparado);
+            free(texto_aparado);
+        }
+    }
+    else if (dados->estado_leitura == 2) {
+        // Usamos a 'linha' original em vez do 'texto' para NÃO APAGAR a indentação do código
+        anexar_solucao(&dados->codigo, limpar_string((char*)linha));
+    }
+    else if (dados->estado_leitura == 1 || dados->problema != NULL) {
         anexar_solucao(&dados->solucao, limpar_string((char *)texto));
     }
 }
@@ -526,6 +545,7 @@ void liberar_algoritmos(DadosTXT *algoritmos, size_t quantidade)
         free(algoritmos[i].conceitos);
         free(algoritmos[i].problema);
         free(algoritmos[i].solucao);
+        free(algoritmos[i].codigo);
         free(algoritmos[i].arquivo);
         free(algoritmos[i].slug);
     }

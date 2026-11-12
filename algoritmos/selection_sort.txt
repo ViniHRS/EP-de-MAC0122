@@ -4,4 +4,24 @@
 4. Data:
 5. Conceitos: vetores, ordenação, comparação, troca de elementos, seleção
 6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
-7. Explicação: O Selection Sort é um algoritmo de ordenação que organiza os elementos selecionando repetidamente o menor valor da região ainda não ordenada e colocando-o na posição correta. Inicialmente, considera-se que todo o conjunto está desordenado. Na primeira passagem, o algoritmo percorre todos os elementos para identificar aquele que apresenta o menor valor e, em seguida, troca sua posição com o primeiro elemento do conjunto. Dessa forma, o menor elemento passa a ocupar definitivamente a primeira posição. Na passagem seguinte, o procedimento é repetido apenas sobre os elementos restantes, desconsiderando aqueles que já foram posicionados corretamente. A cada nova etapa, a região ordenada aumenta em uma posição, enquanto a região não ordenada diminui. O processo continua até que reste apenas um elemento, que necessariamente estará na posição correta. Diferentemente de algoritmos como o Bubble Sort e o Insertion Sort, o Selection Sort realiza uma quantidade limitada de trocas, pois normalmente efetua apenas uma troca por passagem. Entretanto, precisa percorrer repetidamente a parte não ordenada para localizar o menor elemento, resultando em complexidade temporal \(O(n^2)\) independentemente da disposição inicial dos valores.
+7. Explicação: O Selection Sort é um algoritmo de ordenação que organiza os elementos selecionando repetidamente o menor valor da região ainda não ordenada e colocando-o na posição correta. Inicialmente, considera-se que todo o conjunto está desordenado. Na primeira passagem, o algoritmo percorre todos os elementos para identificar aquele que apresenta o menor valor e, em seguida, troca sua posição com o primeiro elemento do conjunto. Dessa forma, o menor elemento passa a ocupar definitivamente a primeira posição.
+Na passagem seguinte, o procedimento é repetido apenas sobre os elementos restantes, desconsiderando aqueles que já foram posicionados corretamente. A cada nova etapa, a região ordenada aumenta em uma posição, enquanto a região não ordenada diminui. O processo continua até que reste apenas um elemento, que necessariamente estará na posição correta.
+Diferentemente de algoritmos como o Bubble Sort e o Insertion Sort, o Selection Sort realiza uma quantidade limitada de trocas, pois normalmente efetua apenas uma troca por passagem. Entretanto, precisa percorrer repetidamente a parte não ordenada para localizar o menor elemento, resultando em complexidade temporal \(O(n^2)\) independentemente da disposição inicial dos valores.
+8. Código:void selection_sort(int N, int A[]) {
+    int position;
+
+    for (int i = 0; i < N; i++) {
+        position = i;
+        for (int j = i+1; j < N; j++) {
+            if (A[j] < A[position]) {
+                position = j;
+            }
+        }
+        //Changing variables
+        if (position != i) {
+            int change = A[i];
+            A[i] = A[position];
+            A[position] = change;
+        }
+    }
+}

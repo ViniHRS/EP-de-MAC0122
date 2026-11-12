@@ -4,4 +4,34 @@
 4. Data: 1962
 5. Conceitos: Vetores, ordenação, recursividade, particionamento, pivô
 6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
-7. Explicação: O Quick Sort é um algoritmo de ordenação baseado na estratégia de divisão e conquista. Seu funcionamento começa com a escolha de um elemento do conjunto, denominado pivô, que será utilizado como referência para reorganizar os demais elementos. Na etapa de particionamento, os elementos são comparados com o pivô e redistribuídos de maneira que aqueles menores fiquem de um lado e aqueles maiores fiquem do outro, considerando a convenção de ordenação crescente. Após essa reorganização, o pivô ocupa uma posição que separa as duas regiões do conjunto. Em seguida, o algoritmo aplica recursivamente o mesmo procedimento às partes localizadas antes e depois do pivô, sem precisar incluir novamente o elemento que já foi posicionado. A divisão continua até que as regiões contenham zero ou um elemento, situações nas quais já estão ordenadas. A eficiência do Quick Sort depende principalmente da escolha do pivô e da qualidade das partições produzidas. Quando as divisões são aproximadamente equilibradas, apresenta complexidade temporal média (O(nlog n)). Entretanto, quando as partições são muito desiguais, pode atingir (O(n^2)) no pior caso. Apesar disso, costuma apresentar excelente desempenho prático em diversas aplicações.
+7. Explicação: O Quick Sort é um algoritmo de ordenação baseado na estratégia de divisão e conquista. Seu funcionamento começa com a escolha de um elemento do conjunto, denominado pivô, que será utilizado como referência para reorganizar os demais elementos. Na etapa de particionamento, os elementos são comparados com o pivô e redistribuídos de maneira que aqueles menores fiquem de um lado e aqueles maiores fiquem do outro, considerando a convenção de ordenação crescente. Após essa reorganização, o pivô ocupa uma posição que separa as duas regiões do conjunto.
+Em seguida, o algoritmo aplica recursivamente o mesmo procedimento às partes localizadas antes e depois do pivô, sem precisar incluir novamente o elemento que já foi posicionado. A divisão continua até que as regiões contenham zero ou um elemento, situações nas quais já estão ordenadas. A eficiência do Quick Sort depende principalmente da escolha do pivô e da qualidade das partições produzidas. Quando as divisões são aproximadamente equilibradas, apresenta complexidade temporal média (O(nlog n)). Entretanto, quando as partições são muito desiguais, pode atingir (O(n^2)) no pior caso. Apesar disso, costuma apresentar excelente desempenho prático em diversas aplicações.
+8. Código:int partitioning(int A[], int start, int end) {
+    int pivot = A[end];
+    int p = start, swapp;
+
+    //Partitioning the array
+    for (int i = start; i < end; i++) {
+        if (A[i] <= pivot) {
+            swapp = A[p];
+            A[p] = A[i];
+            A[i] = swapp;
+            p++;
+        }
+    }
+    //Moving the pivot to its position
+    swapp = A[p];
+    A[p] = A[end];
+    A[end] = swapp;
+
+    return p;
+}
+
+void quick_sort(int A[], int start, int end) {
+    if (start < end) {
+        int pivot_position = partitioning(A, start, end);
+
+        quick_sort(A, start, pivot_position-1);
+        quick_sort(A, pivot_position+1, end);
+    }
+}

@@ -29,4 +29,6 @@ void main_page_html(FILE *fp, size_t qtd_algoritmos, size_t qtd_conceitos);
 int gerar_paginas_indices(DadosTXT *algoritmos, size_t qtd_algoritmos,
                           DadosConceito *conceitos, size_t qtd_conceitos);
 
+void escrever_codigo_colorido(FILE *fp, const char *codigo);
+
 #endif

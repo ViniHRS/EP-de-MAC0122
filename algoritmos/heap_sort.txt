@@ -4,4 +4,42 @@
 4. Data: 1964
 5. Conceitos: vetores, ordenação, comparação, heap, árvores binárias
 6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
-7. Explicação: O Heap Sort é um algoritmo de ordenação que utiliza uma estrutura de dados denominada heap, geralmente representada por uma árvore binária completa armazenada em um vetor. Para realizar a ordenação crescente, normalmente é construída uma estrutura chamada max-heap, na qual cada elemento pai possui valor maior ou igual ao de seus filhos. Inicialmente, o algoritmo reorganiza os elementos do conjunto para estabelecer essa propriedade, formando um heap válido. Como consequência, o maior elemento fica localizado na raiz da árvore, correspondente à primeira posição do vetor. Em seguida, esse elemento é trocado com o último elemento da região ainda não ordenada, sendo considerado definitivamente posicionado. O tamanho efetivo do heap é reduzido e a propriedade da estrutura é restaurada por meio de operações de reorganização, fazendo com que o próximo maior elemento retorne à raiz. Esse procedimento é repetido até que todos os elementos estejam em suas posições corretas. O Heap Sort apresenta complexidade temporal (O(nlog n)) tanto no melhor quanto no pior caso e pode realizar a ordenação diretamente no vetor original, sem exigir uma estrutura auxiliar proporcional ao tamanho da entrada.
+7. Explicação: O Heap Sort é um algoritmo de ordenação que utiliza uma estrutura de dados denominada heap, geralmente representada por uma árvore binária completa armazenada em um vetor. Para realizar a ordenação crescente, normalmente é construída uma estrutura chamada max-heap, na qual cada elemento pai possui valor maior ou igual ao de seus filhos. Inicialmente, o algoritmo reorganiza os elementos do conjunto para estabelecer essa propriedade, formando um heap válido.
+Como consequência, o maior elemento fica localizado na raiz da árvore, correspondente à primeira posição do vetor. Em seguida, esse elemento é trocado com o último elemento da região ainda não ordenada, sendo considerado definitivamente posicionado. O tamanho efetivo do heap é reduzido e a propriedade da estrutura é restaurada por meio de operações de reorganização, fazendo com que o próximo maior elemento retorne à raiz.
+Esse procedimento é repetido até que todos os elementos estejam em suas posições corretas. O Heap Sort apresenta complexidade temporal (O(nlog n)) tanto no melhor quanto no pior caso e pode realizar a ordenação diretamente no vetor original, sem exigir uma estrutura auxiliar proporcional ao tamanho da entrada.
+8. Código:void max_heap(int A[], int N) {
+    for (int k = 0; k < N-1; k++) {
+        int child = k+1;
+        while (child > 0 && A[(child-1)/2] < A[child]) {
+            int swapp = A[(child-1)/2];
+            A[(child-1)/2] = A[child];
+            A[child] = swapp;
+
+            child = (child-1)/2;
+        }
+    }
+}
+
+void heapify(int A[], int N) {
+    int p = 0, child = 1, swapp = A[0];
+    while (child <= N) {
+        if (child < N && A[child] < A[child+1])
+            child++;
+        if (swapp >= A[child])
+            break;
+        A[p] = A[child];
+        p = child;
+        child = 2*p + 1;
+    }
+    A[p] = swapp;
+}
+
+void heap_sort(int A[], int N) {
+    max_heap(A, N);
+    for (int i = N-1; i >= 1; i--) {
+        int swapp = A[0];
+        A[0] = A[i];
+        A[i] = swapp;
+        heapify(A, i-1);
+    }
+}

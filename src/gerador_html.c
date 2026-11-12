@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 #include "indexador.h"
 #include "html_tags.h"   /* sempre por último: define macros curtas (A, B, I, P...) */
 
@@ -108,6 +110,14 @@ void style_css(FILE *fp)
     fputs("code { padding: 2px 5px; border-radius: 4px; background: #e9edf3; }\n", fp);
     fputs("@media (max-width: 760px) { .metadados { grid-template-columns: 1fr; } }\n", fp);
     fputs("@media (max-width: 520px) { .navegacao { padding: 0 5%; } .links-nav { gap: 14px; } .hero { padding-top: 24px; } }\n", fp);
+
+    /* Syntax Highlighting Baseado na Wikipédia */
+    fputs(".codigo-bloco { background: #f8f9fa; border: 1px solid var(--borda); padding: 16px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 0.95rem; line-height: 1.4; }\n", fp);
+    fputs(".syn-kw  { color: #0000ff; font-weight: bold; }\n", fp);  /* Palavras-chave: Azul */
+    fputs(".syn-typ { color: #2b91af; font-weight: bold; }\n", fp);  /* Tipos: Azul Petróleo */
+    fputs(".syn-str { color: #a31515; }\n", fp);                     /* Strings: Vermelho escuro */
+    fputs(".syn-com { color: #008000; }\n", fp);                     /* Comentários: Verde */
+    fputs(".syn-prg { color: #800080; }\n", fp);                     /* Pragmas/Diretivas: Roxo */
 }
 
 /* ------------------------------------------------------------------ */
@@ -197,4 +207,110 @@ void main_page_html(FILE *fp, size_t qtd_algoritmos, size_t qtd_conceitos)
             }
         }
     }
+}
+
+/* ------------------------------------------------------------------ */
+/* Analisador léxico que converte o texto para HTML colorido          */
+/* ------------------------------------------------------------------ */
+
+/* Verifica se a palavra é palavra-chave ou tipo para pintar de azul */
+static int eh_palavra_chave(const char *palavra, int len) {
+    const char *kw[] = {"if", "else", "for", "while", "do", "return", "break", "continue", "switch", "case", "default", "sizeof", "struct", "typedef"};
+    for(int i=0; i<14; i++) if (strlen(kw[i]) == len && strncmp(palavra, kw[i], len) == 0) return 1;
+    return 0;
+}
+
+static int eh_tipo_dado(const char *palavra, int len) {
+    const char *types[] = {"int", "float", "double", "char", "void", "long", "short", "unsigned", "size_t", "FILE"};
+    for(int i=0; i<10; i++) if (strlen(types[i]) == len && strncmp(palavra, types[i], len) == 0) return 1;
+    return 0;
+}
+
+void escrever_codigo_colorido(FILE *fp, const char *codigo) {
+    if (!codigo) return;
+    
+    fputs("<pre class='codigo-bloco'><code>", fp);
+    int i = 0;
+    while (codigo[i] != '\0') {
+        // 1. Comentário de Linha
+        if (codigo[i] == '/' && codigo[i+1] == '/') {
+            fputs("<span class='syn-com'>", fp);
+            while (codigo[i] != '\0' && codigo[i] != '\n') {
+                escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+                i++;
+            }
+            fputs("</span>", fp);
+            continue;
+        }
+        // 2. Comentário de Bloco
+        if (codigo[i] == '/' && codigo[i+1] == '*') {
+            fputs("<span class='syn-com'>", fp);
+            while (codigo[i] != '\0' && !(codigo[i] == '*' && codigo[i+1] == '/')) {
+                escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+                i++;
+            }
+            if (codigo[i] != '\0') {
+                escrever_html_escapado(fp, "*/");
+                i += 2;
+            }
+            fputs("</span>", fp);
+            continue;
+        }
+        // 3. Strings e Caracteres " " ou ' '
+        if (codigo[i] == '"' || codigo[i] == '\'') {
+            char quote = codigo[i];
+            fputs("<span class='syn-str'>", fp);
+            escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+            i++;
+            while (codigo[i] != '\0' && codigo[i] != quote) {
+                if (codigo[i] == '\\' && codigo[i+1] != '\0') { /* Ignora scape (\n, \t) */
+                    escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+                    i++;
+                }
+                escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+                i++;
+            }
+            if (codigo[i] == quote) {
+                escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+                i++;
+            }
+            fputs("</span>", fp);
+            continue;
+        }
+        // 4. Diretivas de pré-processador (#include, #define)
+        if (codigo[i] == '#') {
+            fputs("<span class='syn-prg'>", fp);
+            while (codigo[i] != '\0' && codigo[i] != '\n') {
+                escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+                i++;
+            }
+            fputs("</span>", fp);
+            continue;
+        }
+        // 5. Palavras Reservadas e Tipos
+        if (isalpha(codigo[i]) || codigo[i] == '_') {
+            int start = i;
+            while (isalnum(codigo[i]) || codigo[i] == '_') i++;
+            int len = i - start;
+            
+            /* Extrai temporariamente a palavra para validar sem criar sujeira na memória */
+            char palavra[100];
+            int cp_len = len < 99 ? len : 99;
+            strncpy(palavra, &codigo[start], cp_len);
+            palavra[cp_len] = '\0';
+
+            if (eh_palavra_chave(palavra, len)) {
+                fprintf(fp, "<span class='syn-kw'>%s</span>", palavra);
+            } else if (eh_tipo_dado(palavra, len)) {
+                fprintf(fp, "<span class='syn-typ'>%s</span>", palavra);
+            } else {
+                fprintf(fp, "%s", palavra);
+            }
+            continue;
+        }
+        // 6. Outros Caracteres Comuns (sinais, pontuação, formatação)
+        escrever_html_escapado(fp, (char[]){codigo[i], '\0'});
+        i++;
+    }
+    fputs("</code></pre>\n", fp);
 }

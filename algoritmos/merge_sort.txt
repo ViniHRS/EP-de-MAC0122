@@ -4,4 +4,67 @@
 4. Data: 1945
 5. Conceitos: vetores, ordenação, recursividade, divisão de sequências, intercalação
 6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
-7. Explicação: O Merge Sort é um algoritmo de ordenação baseado na estratégia de divisão e conquista, que consiste em decompor um problema maior em problemas menores, resolvê-los separadamente e combinar seus resultados para obter a solução final. Inicialmente, o conjunto de elementos é dividido em duas partes aproximadamente iguais. Cada uma dessas partes é novamente dividida, repetindo o procedimento até que cada subconjunto contenha apenas um elemento. Como um conjunto com um único elemento já está ordenado, essas divisões representam os casos mais simples do problema. Em seguida, começa a etapa de intercalação, na qual os subconjuntos são reunidos dois a dois, comparando seus primeiros elementos e transferindo para o resultado aquele que apresenta o menor valor. Quando todos os elementos de uma das partes são utilizados, os elementos restantes da outra parte são adicionados ao resultado. Dessa maneira, duas sequências individualmente ordenadas são combinadas para formar uma sequência maior também ordenada. O processo continua recursivamente até que todas as partes sejam reunidas em um único conjunto. O Merge Sort apresenta complexidade temporal (O(nlogn)) em todos os casos e, em sua implementação convencional com vetores, utiliza memória auxiliar proporcional ao tamanho da entrada.
+7. Explicação: O Merge Sort é um algoritmo de ordenação baseado na estratégia de divisão e conquista, que consiste em decompor um problema maior em problemas menores, resolvê-los separadamente e combinar seus resultados para obter a solução final. Inicialmente, o conjunto de elementos é dividido em duas partes aproximadamente iguais.
+Cada uma dessas partes é novamente dividida, repetindo o procedimento até que cada subconjunto contenha apenas um elemento. Como um conjunto com um único elemento já está ordenado, essas divisões representam os casos mais simples do problema. Em seguida, começa a etapa de intercalação, na qual os subconjuntos são reunidos dois a dois, comparando seus primeiros elementos e transferindo para o resultado aquele que apresenta o menor valor.
+Quando todos os elementos de uma das partes são utilizados, os elementos restantes da outra parte são adicionados ao resultado. Dessa maneira, duas sequências individualmente ordenadas são combinadas para formar uma sequência maior também ordenada. O processo continua recursivamente até que todas as partes sejam reunidas em um único conjunto. O Merge Sort apresenta complexidade temporal (O(nlogn)) em todos os casos e, em sua implementação convencional com vetores, utiliza memória auxiliar proporcional ao tamanho da entrada.
+8. Código:void merge_sort(int A[], int start, int end) {
+    if (start < end) {
+        int middle = start + (end - start)/2;
+        //Dividing the array
+        merge_sort(A, start, middle);
+        merge_sort(A, middle+1, end);
+        //Merging the sorted elements
+        merge(A, start, middle, end);
+    }
+}
+
+void merge(int A[], int start, int middle, int end) {
+    //Making a copy of both sides of the array
+    int nL = middle - start + 1;
+    int nR = end - middle;
+    //Allocating memory for the copies
+    int *left = (int*)malloc(nL*sizeof(int));
+    int *right = (int*)malloc(nR*sizeof(int));
+
+    if (left == NULL || right == NULL) {
+        printf("Erro ao alocar memória para as cópias do vetor A[]\n");
+        return;
+    }
+    else {
+        for (int i = 0; i < nL; i++) {
+            left[i] = A[start+i];
+        }
+        for (int j = 0; j < nR; j++) {
+            right[j] = A[middle+1+j];
+        }
+    }
+    //Merging both sides
+    int l = 0, r = 0, k = start;
+    
+    while (l < nL && r < nR) {
+        if (left[l] <= right[r]) {
+            A[k] = left[l];
+            l++;
+        }
+        else {
+            A[k] = right[r];
+            r++;
+        }
+        k++;
+    }
+    //Copying the rest of the left elements, if there's any
+    while (l < nL) {
+        A[k] = left[l];
+        l++;
+        k++;
+    }
+    //Copying the rest of the right elements, if there's any
+    while (r < nR) {
+        A[k] = right[r];
+        r++;
+        k++;
+    } 
+    //Freeing up the memory allocated
+    free(left);
+    free(right);
+}

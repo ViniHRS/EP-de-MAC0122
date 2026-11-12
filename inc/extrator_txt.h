@@ -18,6 +18,8 @@ typedef struct {
     char *conceitos;
     char *problema;
     char *solucao;
+    char *codigo;
+    int estado_leitura;
     char *arquivo;   /* nome do .txt sem extensão */
     char *slug;      /* usado no nome do .html */
 } DadosTXT;

@@ -611,6 +611,13 @@ static int gerar_pagina_algoritmo(DadosTXT *a, DadosConceito *conceitos, size_t 
                     H2("") { _("Explicação"); }
                     DIV("class='solucao'") { escrever_texto_com_quebras(fp, a->solucao); }
                 }
+                //Renderização do Código Colorido
+                if (a->codigo != NULL && a->codigo[0] != '\0') {
+                    SECTION() {
+                        H2("") { _("Implementação em C"); }
+                        escrever_codigo_colorido(fp, a->codigo); 
+                    }
+                }
             }
         }
     }

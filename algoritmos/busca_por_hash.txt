@@ -4,4 +4,69 @@
 4. Data:
 5. Conceitos: espalhamento
 6. Problema: Dada uma tabela hash e uma chave, determinar se essa chave está armazenada na tabela e, caso esteja, localizar sua posição.
-7. Explicação: A busca por Hash é um método de localização de elementos que utiliza uma estrutura de dados denominada tabela hash. Seu princípio consiste em aplicar uma função hash sobre uma chave, transformando-a em um índice que indica a posição associada ao elemento dentro da tabela. Assim, em vez de percorrer todos os elementos até encontrar aquele que corresponde à chave procurada, o algoritmo utiliza o resultado da função para acessar diretamente uma posição provável. Entretanto, diferentes chaves podem produzir o mesmo índice, situação conhecida como colisão. Para lidar com esse problema, podem ser utilizados mecanismos como endereçamento aberto, no qual outras posições da tabela são examinadas, ou encadeamento, no qual múltiplos elementos são associados à mesma posição por meio de estruturas auxiliares. A eficiência da busca depende da qualidade da função hash, do tamanho da tabela e da quantidade de colisões. Quando a distribuição das chaves é adequada, a busca apresenta tempo médio de execução (O(1)), embora seu pior caso possa chegar a (O(n).
+7. Explicação: A busca por Hash é um método de localização de elementos que utiliza uma estrutura de dados denominada tabela hash. Seu princípio consiste em aplicar uma função hash sobre uma chave, transformando-a em um índice que indica a posição associada ao elemento dentro da tabela. Assim, em vez de percorrer todos os elementos até encontrar aquele que corresponde à chave procurada, o algoritmo utiliza o resultado da função para acessar diretamente uma posição provável.
+Entretanto, diferentes chaves podem produzir o mesmo índice, situação conhecida como colisão. Para lidar com esse problema, podem ser utilizados mecanismos como endereçamento aberto, no qual outras posições da tabela são examinadas, ou encadeamento, no qual múltiplos elementos são associados à mesma posição por meio de estruturas auxiliares. A eficiência da busca depende da qualidade da função hash, do tamanho da tabela e da quantidade de colisões. Quando a distribuição das chaves é adequada, a busca apresenta tempo médio de execução (O(1)), embora seu pior caso possa chegar a (O(n)).
+8. Código:
+// Struct for a Node
+typedef struct Node {
+    int key, data;
+    struct Node* next;
+} Node;
+
+Node* create_node(int key, int data) {
+    Node *new_node = (Node*)malloc(sizeof(Node));
+    //Checking if the memory allocations failed
+    if (new_node == NULL) {
+        printf("Erro ao criar um novo nó\n");
+        exit(1);
+    }
+    //Initializing new_node
+    new_node->key = key;
+    new_node->data = data;
+    new_node->next = NULL;
+
+    return new_node;
+}
+
+Node** create_hash_table() {
+    //Creating a hash table of 10 positions
+    Node **table = (Node**)malloc(10*sizeof(Node*));
+    if (table == NULL) {
+        printf("Falha ao criar a tabela Hash\n");
+        exit(1);
+    }
+    //Initializing the table
+    for (int i = 0; i < 10; i++) {
+        table[i] = NULL;
+    }
+    return table;
+}
+
+int hash_function(int key) {
+    int index = key % 10;   //This hash function takes the remainder as an index
+    //Correcting index value if key is negative
+    if (index < 0) {
+        index = -1*index;
+    }
+
+    return index;
+}
+
+void search(Node **table, int key) {
+    if (table == NULL) {
+        printf("A tabela não existe\n");
+        return;
+    }
+    int index = hash_function(key);
+    //Creating a node to search for the element
+    Node *current_node = table[index];
+    while (current_node != NULL) {
+        if (current_node->key == key) {
+            printf("O elemento %i foi encontrado\n", current_node->data);
+            return;
+        }
+        current_node = current_node->next;
+    }
+    //If any element was found
+    printf("Não há um elemento de chave %i na tabela Hash\n", key);
+}
