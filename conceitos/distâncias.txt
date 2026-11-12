@@ -1,2 +1,5 @@
 1. Nome do conceito: distâncias
-2. Explicação do conceito: Em um grafo, a distância entre dois vértices é uma medida do custo de um caminho que liga esses vértices. Em um grafo não ponderado, a distância pode ser definida pela quantidade de arestas percorridas. Em um grafo ponderado, ela costuma corresponder à soma dos pesos das arestas do caminho. Quando se considera a menor distância, procura-se o caminho cujo custo total é mínimo entre todas as possibilidades. Se não existir caminho entre dois vértices, eles são considerados desconectados entre si.
+2. Explicação do conceito: Em um grafo, a distância entre dois vértices é uma medida do custo de um caminho que liga esses vértices.
+Em um grafo não ponderado, a distância pode ser definida pela quantidade de arestas percorridas.
+Em um grafo ponderado, ela costuma corresponder à soma dos pesos das arestas do caminho. Quando se considera a menor distância, procura-se o caminho cujo custo total é mínimo entre todas as possibilidades.
+Se não existir caminho entre dois vértices, eles são considerados desconectados entre si.

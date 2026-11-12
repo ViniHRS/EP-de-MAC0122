@@ -1,2 +1,4 @@
 1. Nome do conceito: vetores
-2. Explicação do conceito: Um vetor é uma estrutura de dados que armazena uma sequência de elementos, geralmente do mesmo tipo, em posições consecutivas de memória. Cada elemento é identificado por um índice, que indica sua posição na sequência e permite acessá-lo diretamente. O tamanho de um vetor corresponde à quantidade de posições disponíveis e, em implementações tradicionais, é definido na sua criação. Vetores permitem percorrer, consultar e modificar seus elementos, sendo úteis para armazenar conjuntos ordenados ou não ordenados de valores.
+2. Explicação do conceito: Um vetor é uma estrutura de dados que armazena uma sequência de elementos, geralmente do mesmo tipo, em posições consecutivas de memória.
+Cada elemento é identificado por um índice, que indica sua posição na sequência e permite acessá-lo diretamente. O tamanho de um vetor corresponde à quantidade de posições disponíveis e, em implementações tradicionais, é definido na sua criação.
+Vetores permitem percorrer, consultar e modificar seus elementos, sendo úteis para armazenar conjuntos ordenados ou não ordenados de valores.

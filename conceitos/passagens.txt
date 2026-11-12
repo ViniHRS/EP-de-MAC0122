@@ -1,2 +1,4 @@
 1. Nome do conceito: passagens
-2. Explicação do conceito: Uma passagem é uma etapa de processamento em que um procedimento percorre todos os elementos de uma sequência ou uma parte dela para realizar determinadas operações. Durante uma passagem, podem ser feitas comparações, trocas ou seleções, conforme o objetivo do processamento. Ao final de cada passagem, alguma parte da sequência pode estar organizada ou mais próxima da condição desejada. A repetição de passagens permite avançar progressivamente até que todo o conjunto tenha sido processado.
+2. Explicação do conceito: Uma passagem é uma etapa de processamento em que um procedimento percorre todos os elementos de uma sequência ou uma parte dela para realizar determinadas operações.
+Durante uma passagem, podem ser feitas comparações, trocas ou seleções, conforme o objetivo do processamento. Ao final de cada passagem, alguma parte da sequência pode estar organizada ou mais próxima da condição desejada.
+A repetição de passagens permite avançar progressivamente até que todo o conjunto tenha sido processado.

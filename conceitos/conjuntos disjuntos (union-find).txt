@@ -1,2 +1,5 @@
 1. Nome do conceito: conjuntos disjuntos (union-find)
-2. Explicação do conceito: Conjuntos disjuntos são conjuntos que não possuem elementos em comum. A estrutura Union-Find, também chamada de Disjoint Set Union (DSU), mantém uma coleção desses conjuntos e permite descobrir a qual conjunto um elemento pertence e unir dois conjuntos em um só. A operação Find identifica o representante de um conjunto, isto é, um elemento usado para identificá-lo. A operação Union combina os conjuntos que contêm dois elementos. Essa estrutura é útil em situações que exigem acompanhar grupos separados e verificar se dois elementos já pertencem ao mesmo grupo.
+2. Explicação do conceito: Conjuntos disjuntos são conjuntos que não possuem elementos em comum.
+A estrutura Union-Find, também chamada de Disjoint Set Union (DSU), mantém uma coleção desses conjuntos e permite descobrir a qual conjunto um elemento pertence e unir dois conjuntos em um só.
+A operação Find identifica o representante de um conjunto, isto é, um elemento usado para identificá-lo. A operação Union combina os conjuntos que contêm dois elementos.
+Essa estrutura é útil em situações que exigem acompanhar grupos separados e verificar se dois elementos já pertencem ao mesmo grupo.

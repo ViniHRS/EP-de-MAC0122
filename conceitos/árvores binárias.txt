@@ -1,2 +1,4 @@
 1. Nome do conceito: árvores binárias
-2. Explicação do conceito: Uma árvore binária é uma estrutura de dados hierárquica em que cada nó possui, no máximo, dois filhos, chamados normalmente de filho esquerdo e filho direito. Um nó é uma unidade que armazena um elemento, e a ligação entre dois nós representa a relação entre eles. A estrutura pode ser vazia ou possuir uma raiz, da qual partem as demais ramificações. Árvores binárias são utilizadas para organizar informações e representar relações hierárquicas em que cada elemento pode estar ligado a até dois elementos descendentes.
+2. Explicação do conceito: Uma árvore binária é uma estrutura de dados hierárquica em que cada nó possui, no máximo, dois filhos, chamados normalmente de filho esquerdo e filho direito.
+Um nó é uma unidade que armazena um elemento, e a ligação entre dois nós representa a relação entre eles. A estrutura pode ser vazia ou possuir uma raiz, da qual partem as demais ramificações.
+Árvores binárias são utilizadas para organizar informações e representar relações hierárquicas em que cada elemento pode estar ligado a até dois elementos descendentes.

@@ -1,2 +1,4 @@
 1. Nome do conceito: seleção
-2. Explicação do conceito: Seleção é o processo de escolher um elemento de um conjunto ou de uma parte de uma sequência com base em um critério definido. Esse critério pode ser, por exemplo, identificar o menor ou o maior valor entre os elementos considerados. Para realizar a seleção, os elementos são examinados e comparados até que seja identificado aquele que atende ao critério. A seleção permite escolher um elemento específico sem necessariamente organizar todos os demais.
+2. Explicação do conceito: Seleção é o processo de escolher um elemento de um conjunto ou de uma parte de uma sequência com base em um critério definido. Esse critério pode ser, por exemplo, identificar o menor ou o maior valor entre os elementos considerados.
+Para realizar a seleção, os elementos são examinados e comparados até que seja identificado aquele que atende ao critério. 
+ seleção permite escolher um elemento específico sem necessariamente organizar todos os demais.

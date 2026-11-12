@@ -1,2 +1,4 @@
 1. Nome do conceito: divisão euclidiana
-2. Explicação do conceito: A divisão euclidiana expressa a divisão de um número inteiro por outro inteiro não nulo por meio de um quociente e de um resto. Para inteiros a e b, com b diferente de zero, existem inteiros q e r tais que a = bq + r, em que q é o quociente e r é o resto, satisfazendo 0 ≤ r < |b|. Essa relação garante que o resto seja não negativo e menor que o valor absoluto do divisor. A divisão euclidiana é uma forma precisa de descrever a divisão entre números inteiros, inclusive quando o resultado não é inteiro.
+2. Explicação do conceito: A divisão euclidiana expressa a divisão de um número inteiro por outro inteiro não nulo por meio de um quociente e de um resto.
+Para inteiros a e b, com b diferente de zero, existem inteiros q e r tais que a = bq + r, em que q é o quociente e r é o resto, satisfazendo 0 ≤ r < |b|. Essa relação garante que o resto seja não negativo e menor que o valor absoluto do divisor.
+A divisão euclidiana é uma forma precisa de descrever a divisão entre números inteiros, inclusive quando o resultado não é inteiro.
