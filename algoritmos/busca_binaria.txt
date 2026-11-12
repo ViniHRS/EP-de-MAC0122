@@ -1,0 +1,7 @@
+1. Técnica: Divisão e conquista
+2. Algoritmo: Busca binária
+3. Autores:
+4. Data:
+5. Conceitos: vetores, ordenação, comparação, recursividade
+6. Problema: Dado um vetor ordenado e um elemento, determinar se ele está presente e, caso esteja, encontrar sua posição.
+7. Explicação: A busca binária é um algoritmo utilizado para localizar um determinado elemento em um vetor previamente ordenado. Seu funcionamento baseia-se na comparação do elemento procurado com aquele que ocupa a posição central do intervalo de busca. Se os valores forem iguais, a posição do elemento é encontrada. Caso o elemento procurado seja menor, a busca continua apenas na metade esquerda do intervalo; caso seja maior, continua na metade direita. Dessa forma, a cada comparação, aproximadamente metade dos elementos restantes é descartada, reduzindo significativamente o espaço de busca. O procedimento é repetido até que o elemento seja encontrado ou até que não existam mais posições a serem verificadas. O algoritmo pode ser implementado tanto de maneira iterativa quanto recursiva e apresenta complexidade temporal (O(log n)), desde que o conjunto esteja ordenado e permita acesso eficiente aos elementos por índice.

@@ -1,0 +1,7 @@
+1. Técnica: Hashing
+2. Algoritmo: Busca por Hash
+3. Autores:
+4. Data:
+5. Conceitos: espalhamento
+6. Problema: Dada uma tabela hash e uma chave, determinar se essa chave está armazenada na tabela e, caso esteja, localizar sua posição.
+7. Explicação: A busca por Hash é um método de localização de elementos que utiliza uma estrutura de dados denominada tabela hash. Seu princípio consiste em aplicar uma função hash sobre uma chave, transformando-a em um índice que indica a posição associada ao elemento dentro da tabela. Assim, em vez de percorrer todos os elementos até encontrar aquele que corresponde à chave procurada, o algoritmo utiliza o resultado da função para acessar diretamente uma posição provável. Entretanto, diferentes chaves podem produzir o mesmo índice, situação conhecida como colisão. Para lidar com esse problema, podem ser utilizados mecanismos como endereçamento aberto, no qual outras posições da tabela são examinadas, ou encadeamento, no qual múltiplos elementos são associados à mesma posição por meio de estruturas auxiliares. A eficiência da busca depende da qualidade da função hash, do tamanho da tabela e da quantidade de colisões. Quando a distribuição das chaves é adequada, a busca apresenta tempo médio de execução (O(1)), embora seu pior caso possa chegar a (O(n).

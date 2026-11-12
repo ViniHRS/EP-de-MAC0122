@@ -1,0 +1,7 @@
+1. Técnica: Recursão
+2. Algoritmo: Algoritmo de Euclides para cálculo do máximo divisor comum (MDC)
+3. Autores: Euclides de Alexandria
+4. Data: Aproximadamente 300 a.C.
+5. Conceitos: recursividade, divisibilidade, números inteiros, máximo divisor comum, divisão euclidiana, resto da divisão
+6. Problema: Dados dois números inteiros não negativos, não ambos nulos, determinar o máximo divisor comum entre eles.
+7. Explicação: O algoritmo de Euclides é um procedimento matemático utilizado para calcular o máximo divisor comum (MDC) entre dois números inteiros não negativos, ou seja, o maior número inteiro positivo que divide ambos sem deixar resto. Seu funcionamento baseia-se na propriedade de que o MDC entre dois números também é igual ao MDC entre o menor deles e o resto da divisão do maior pelo menor. Assim, em cada etapa, o algoritmo realiza uma divisão e substitui os valores originais pelo divisor e pelo resto obtido. Esse procedimento reduz progressivamente os valores envolvidos, preservando o máximo divisor comum procurado. Quando o resto da divisão se torna zero, significa que o último divisor não nulo divide exatamente os dois números e, portanto, corresponde ao MDC. O algoritmo pode ser implementado de maneira iterativa, utilizando um laço de repetição, ou recursiva, realizando uma nova chamada com os valores atualizados. Sua eficiência decorre da rápida redução dos números a cada etapa, apresentando complexidade temporal logarítmica em relação à magnitude dos valores fornecidos.

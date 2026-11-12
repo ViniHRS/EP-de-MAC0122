@@ -18,7 +18,7 @@
 
 // Webpage Layout
 #define HEADER() SCOPE(fputs("<header>", fp), fputs("</header>", fp))
-#define NAV() SCOPE(fputs("<nav>", fp), fputs("</nav>", fp))
+#define NAV(attributes) SCOPE(fprintf(fp, "<nav %s>", attributes), fputs("</nav>", fp))
 #define MAIN() SCOPE(fputs("<main>", fp), fputs("</main>", fp))
 #define SECTION() SCOPE(fputs("<section>", fp), fputs("</section>", fp))
 #define ASIDE() SCOPE(fputs("<aside>", fp), fputs("</aside>", fp))
@@ -54,6 +54,7 @@
 #define OL(attributes) SCOPE(fprintf(fp, "<ol %s>", attributes), fputs("</ol>", fp))
 #define UL(attributes) SCOPE(fprintf(fp, "<ul %s>", attributes), fputs("</ul>", fp))
 #define LI(attributes) SCOPE(fprintf(fp, "<li %s>", attributes), fputs("</li>", fp))
+#define LINK_ITEM(href, text) SCOPE(fprintf(fp, "<li><a href='%s'>", href), fputs("</a></li>", fp))
 
 // Table
 #define TABLE(attributes) SCOPE(fprintf(fp, "<table %s>", attributes), fputs("</table>", fp))

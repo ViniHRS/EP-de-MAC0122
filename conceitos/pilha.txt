@@ -1,0 +1,2 @@
+1. Nome do conceito: pilha
+2. Explicação do conceito: Uma pilha é uma estrutura de dados linear que segue a política LIFO (Last In, First Out), isto é, o último elemento inserido é o primeiro a ser removido. Tanto a inserção quanto a remoção ocorrem em uma mesma extremidade, chamada topo. A operação de inserir um elemento é conhecida como empilhar, enquanto a operação de remover o elemento do topo é chamada de desempilhar. Essa organização é útil quando os elementos precisam ser processados na ordem inversa àquela em que foram inseridos.

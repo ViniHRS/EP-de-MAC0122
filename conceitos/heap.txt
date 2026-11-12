@@ -1,0 +1,2 @@
+1. Nome do conceito: heap
+2. Explicação do conceito: Heap é uma estrutura de dados baseada em uma árvore binária completa, isto é, uma árvore em que todos os níveis, exceto possivelmente o último, estão preenchidos, e o último é preenchido da esquerda para a direita. A estrutura obedece à propriedade de heap: em um max-heap, cada nó tem valor maior ou igual ao de seus filhos; em um min-heap, tem valor menor ou igual. Por isso, o maior ou o menor elemento fica na raiz. Um heap pode ser representado em um vetor, usando os índices para localizar os nós relacionados.

@@ -1,0 +1,7 @@
+1. Tecnica: Divisão e conquista, recursão
+2. Algoritmo: Quick Sort (ordenação rápida)
+3. Autores: Tony Hoare
+4. Data: 1962
+5. Conceitos: Vetores, ordenação, recursividade, particionamento, pivô
+6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
+7. Explicação: O Quick Sort é um algoritmo de ordenação baseado na estratégia de divisão e conquista. Seu funcionamento começa com a escolha de um elemento do conjunto, denominado pivô, que será utilizado como referência para reorganizar os demais elementos. Na etapa de particionamento, os elementos são comparados com o pivô e redistribuídos de maneira que aqueles menores fiquem de um lado e aqueles maiores fiquem do outro, considerando a convenção de ordenação crescente. Após essa reorganização, o pivô ocupa uma posição que separa as duas regiões do conjunto. Em seguida, o algoritmo aplica recursivamente o mesmo procedimento às partes localizadas antes e depois do pivô, sem precisar incluir novamente o elemento que já foi posicionado. A divisão continua até que as regiões contenham zero ou um elemento, situações nas quais já estão ordenadas. A eficiência do Quick Sort depende principalmente da escolha do pivô e da qualidade das partições produzidas. Quando as divisões são aproximadamente equilibradas, apresenta complexidade temporal média (O(nlog n)). Entretanto, quando as partições são muito desiguais, pode atingir (O(n^2)) no pior caso. Apesar disso, costuma apresentar excelente desempenho prático em diversas aplicações.

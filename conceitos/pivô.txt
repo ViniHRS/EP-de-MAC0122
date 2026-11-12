@@ -1,0 +1,2 @@
+1. Nome do conceito: pivô
+2. Explicação do conceito: Pivô é um elemento escolhido como referência para comparar e separar os demais elementos de uma sequência durante um particionamento. Os valores podem ser reorganizados de modo que os menores que o pivô fiquem de um lado e os maiores fiquem do outro, conforme a regra adotada. Após a separação, o pivô ocupa uma posição que divide as partes resultantes. A escolha do pivô pode influenciar o tamanho dessas partes e o equilíbrio da divisão.

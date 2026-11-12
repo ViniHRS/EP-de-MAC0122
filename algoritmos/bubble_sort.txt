@@ -1,0 +1,7 @@
+1. Técnica: Incremental
+2. Algoritmo: Bubble Sort 
+3. Autores: 
+4. Data:
+5. Conceitos: vetores, ordenação, comparação, trocas adjacentes, passagens
+6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
+7. Explicação: O Bubble Sort é um algoritmo de ordenação que organiza os elementos de um conjunto por meio de comparações sucessivas entre elementos adjacentes. Durante cada passagem pelo conjunto, compara dois elementos consecutivos e realiza uma troca caso estejam em uma ordem diferente daquela desejada. Como consequência, os maiores elementos tendem a se deslocar progressivamente para o final do conjunto quando a ordenação é crescente, de maneira semelhante a bolhas que sobem até a superfície. Após cada passagem, pelo menos um elemento alcança sua posição definitiva. O processo é repetido até que todos os elementos estejam ordenados. Uma implementação pode utilizar uma variável de controle para identificar se houve alguma troca durante a passagem, encerrando antecipadamente o algoritmo caso nenhuma alteração seja necessária. Apesar de sua simplicidade, apresenta desempenho pouco eficiente para conjuntos grandes, principalmente devido à quantidade de comparações e movimentações realizadas.

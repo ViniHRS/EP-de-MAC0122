@@ -1,0 +1,2 @@
+1. Nome do conceito: troca de elementos
+2. Explicação do conceito: A troca de elementos é uma operação que inverte as posições de dois elementos de uma estrutura, fazendo com que cada um passe a ocupar o lugar do outro. Em um vetor, essa operação pode ser realizada com o auxílio de uma variável temporária, que guarda um dos valores enquanto as posições são atualizadas. A troca modifica a disposição dos elementos sem alterar os valores armazenados. Ela é utilizada sempre que é necessário reposicionar elementos dentro de uma sequência.

@@ -21,4 +21,4 @@ output/
 .vscode/
 .idea/
 
-./src/gerador_html
+generated/

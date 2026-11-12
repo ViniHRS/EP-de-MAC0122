@@ -4,54 +4,56 @@
 #
 # ***************************************************************
 
-#Variável de diretório
+# Variáveis de diretório
 SRCDIR = src
 INCDIR = inc
 OUTDIR = output
 GENDIR = generated
 
-#Nome do executável final:
+# Nome do executável final:
 EXEC = gerador_html
 
-#Busca todos os arquivos .c na pasta src e define os correspondentes .o na pasta output
+# Lista todos os ficheiros fonte e cabeçalhos
 SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $(SRCS))
-
-#Impede que o Make apague arquivos .o quando os trata como temporários
-.PRECIOUS: $(OUTDIR)/%
-
-#Coleta todos os arquivos .h da pasta inc automaticamente
 HEADERS = $(wildcard $(INCDIR)/*.h)
 
-#Compilador e Flags
+# Compilador e Flags
 RM = /bin/rm -f
 CC = gcc
 CFLAGS = -std=c99 -Wall -pedantic -O2 -lm -g -D_GNU_SOURCE -I$(INCDIR)
 
 # ***************************************************************
 
-#Declara alvos que não são arquivos reais
+# Declara alvos que não são ficheiros reais
 .PHONY: all page run-page clean clean_all
 
 # Alvo padrão executado ao digitar apenas "make"
 all: page
 
 # ***************************************************************
-# Regra de Compilação
+# Regra de Compilação de Ficheiros Objeto (.o)
 # ***************************************************************
-$(OUTDIR)/% : $(SRCDIR)/%.c $(HEADERS)
+$(OUTDIR)/%.o: $(SRCDIR)/%.c $(HEADERS)
 	@mkdir -p $(OUTDIR)
 	@mkdir -p $(GENDIR)
-	$(CC) $< -o $@ $(CFLAGS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# ***************************************************************
+# Regra de Linkagem do Executável Final (Junta todos os .o)
+# ***************************************************************
+$(OUTDIR)/$(EXEC): $(OBJS)
+	@mkdir -p $(GENDIR)
+	$(CC) $(OBJS) -o $@ $(CFLAGS)
 
 # ***************************************************************
 # Alvos de compilação e execução
 # ***************************************************************
 
-# make page: compila o projeto
+# make page: compila todo o projeto
 page: $(OUTDIR)/$(EXEC)
 
-# make run-page: compila (se necessário) e executa
+# make run-page: compila (se necessário) e executa o gerador
 run-page: page
 	./$(OUTDIR)/$(EXEC)
 
@@ -60,14 +62,15 @@ run-page: page
 # ***************************************************************
 
 clean:
-	#Limpa arquivos temporários de editores
+	# Limpa ficheiros temporários de editores
 	$(RM) -r *~ \#* .\#* core a.out
 	$(RM) -r $(SRCDIR)/*~ $(SRCDIR)/\#* $(SRCDIR)/.\#*
 	$(RM) -r $(INCDIR)/*~ $(INCDIR)/\#* $(INCDIR)/.\#*
 	$(RM) -rf *.dSYM
-	# Limpa os arquivos objeto (.o) gerados na pasta output
-	$(RM) -f $(OUTDIR)/*.o
+	# Limpa os ficheiros objeto (.o) e o executável gerados na pasta output
+	$(RM) -f $(OUTDIR)/*.o $(OUTDIR)/$(EXEC)
 
-clean_all: clean
-		   #Limpeza total (apaga a pasta output)
-	       $(RM) -rf $(OUTDIR)
+clean-all: clean
+	# Limpeza total (apaga as pastas output e generated)
+	$(RM) -rf $(OUTDIR)
+	$(RM) -rf $(GENDIR)

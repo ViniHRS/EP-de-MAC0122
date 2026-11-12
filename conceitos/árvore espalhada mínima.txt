@@ -1,0 +1,2 @@
+1. Nome do conceito: árvore espalhada mínima
+2. Explicação do conceito: Uma árvore espalhada de um grafo não direcionado e conexo é um subgrafo que contém todos os vértices do grafo original e mantém esses vértices conectados, sem formar ciclos. Um subgrafo é uma estrutura formada por vértices e arestas escolhidos a partir de um grafo maior. Uma árvore espalhada mínima é uma árvore espalhada cuja soma dos pesos de suas arestas é a menor possível entre todas as árvores espalhadas do grafo. Ela conecta todos os vértices com o menor custo total, sem conexões redundantes.

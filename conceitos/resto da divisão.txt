@@ -1,0 +1,2 @@
+1. Nome do conceito: resto da divisão
+2. Explicação do conceito: O resto da divisão é o valor que sobra quando um número inteiro é dividido por outro inteiro não nulo, após retirar do dividendo a quantidade correspondente ao quociente. Na divisão euclidiana, o dividendo é igual ao produto do divisor pelo quociente somado ao resto. Para um divisor positivo, o resto é sempre maior ou igual a zero e menor que o divisor. O resto permite verificar se uma divisão é exata: quando ele é zero, o dividendo é divisível pelo divisor.

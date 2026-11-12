@@ -1,0 +1,7 @@
+1. Técnica: Hashing
+2. Algoritmo: Método de Cichelli (geração de função hash perfeita)
+3. Autores: Richard J. Cichelli
+4. Data: 1980
+5. Conceitos: espalhamento
+6. Problema: Dado um conjunto fixo de palavras, construir uma função de espalhamento que associe cada palavra a uma posição única de uma tabela, minimizando seu tamanho e eliminando colisões.
+7. Explicação: O método de Cichelli é um procedimento utilizado para construir uma função hash perfeita para um conjunto fixo de palavras, especialmente em aplicações nas quais é necessário localizar rapidamente identificadores ou palavras reservadas. Uma função hash perfeita é aquela que associa cada elemento de um conjunto conhecido a uma posição exclusiva da tabela, sem produzir colisões entre os elementos desse conjunto. O método de Cichelli utiliza informações das palavras, particularmente suas letras iniciais e finais, combinadas com seus comprimentos, para calcular os índices correspondentes. Durante a construção da função, são atribuídos valores às letras envolvidas, buscando encontrar uma combinação que produza posições distintas para todas as palavras. Para orientar esse processo, as palavras são consideradas segundo critérios que priorizam aquelas que compartilham letras iniciais ou finais com outras palavras do conjunto. A construção exige testar diferentes atribuições até encontrar uma solução válida. Depois de construída, a função permite calcular diretamente a posição de cada palavra pertencente ao conjunto, dispensando comparações sucessivas com os demais elementos.

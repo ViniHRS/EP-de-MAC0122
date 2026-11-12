@@ -1,0 +1,2 @@
+1. Nome do conceito: divisão de sequências
+2. Explicação do conceito: Divisão de sequências é o processo de separar uma sequência de elementos em partes menores. A divisão pode ser feita em duas ou mais partes, conforme um critério definido, como separar a sequência aproximadamente ao meio. Cada parte pode então ser examinada ou processada independentemente. Em procedimentos que resolvem problemas por etapas, a divisão reduz o tamanho das partes que precisam ser tratadas e pode facilitar a obtenção da solução para o conjunto completo.

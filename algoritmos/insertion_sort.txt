@@ -1,0 +1,7 @@
+1. Técnica: Incremental
+2. Algoritmo: Insertion Sort (ordenação por inserção)
+3. Autores:
+4. Data:
+5. Conceitos: vetores, ordenação, comparação, inserção de elementos, deslocamento de elementos
+6. Problema: Dado um conjunto de elementos, ordenar seus valores em ordem crescente ou decrescente.
+7. Explicação: O Insertion Sort é um algoritmo de ordenação que constrói progressivamente uma sequência ordenada, inserindo cada novo elemento na posição adequada em relação aos elementos já processados. Inicialmente, considera-se que o primeiro elemento do conjunto está ordenado, pois uma sequência contendo apenas um elemento já satisfaz essa condição. Em seguida, o algoritmo seleciona o próximo elemento da parte ainda não ordenada e compara seu valor com os elementos anteriores. Enquanto encontrar elementos maiores do que aquele que está sendo inserido, desloca esses elementos uma posição para a direita, abrindo espaço para a inserção na posição correta. Depois de inserir o elemento, a região ordenada passa a conter um elemento a mais. Esse procedimento é repetido até que todos os elementos tenham sido incorporados à sequência ordenada. O algoritmo é particularmente eficiente para conjuntos pequenos ou parcialmente ordenados, pois realiza poucas movimentações quando os elementos já estão próximos de suas posições definitivas. Sua complexidade temporal é (O(n^2)) no pior caso, mas pode chegar a (O(n)) quando o conjunto já está ordenado.

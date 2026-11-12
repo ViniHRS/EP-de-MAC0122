@@ -1,0 +1,2 @@
+1. Nome do conceito: máximo divisor comum
+2. Explicação do conceito: O máximo divisor comum (MDC) de dois ou mais números inteiros, não todos nulos, é o maior número inteiro positivo que divide todos eles sem deixar resto. Um divisor comum é um número que divide cada um dos valores considerados de maneira exata. O MDC representa, portanto, o maior valor que pode ser utilizado como divisor compartilhado. Ele é útil, por exemplo, para simplificar frações e resolver problemas que envolvem divisores comuns.
