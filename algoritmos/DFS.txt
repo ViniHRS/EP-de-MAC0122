@@ -4,4 +4,37 @@
 4. Data:
 5. Conceitos: grafos, árvores, pilha
 6. Problema: Dado um grafo e um vértice inicial, percorrer os vértices alcançáveis explorando cada caminho o mais profundamente possível antes de retroceder.
-7. Explicação: O algoritmo de busca em profundidade é utilizado para percorrer grafos, explorando um caminho o mais profundamente possível antes de retornar e investigar outras possibilidades. A partir de um vértice inicial, o algoritmo visita um de seus vizinhos ainda não explorados e continua avançando pelos vértices alcançáveis a partir dele. Quando chega a um vértice que não possui vizinhos não visitados, realiza um retrocesso, retornando aos vértices anteriores para procurar caminhos alternativos. Esse comportamento pode ser implementado por meio de recursão, utilizando implicitamente a pilha de chamadas, ou por meio de uma estrutura de dados do tipo pilha, controlada explicitamente. Para evitar visitas repetidas e impedir que ciclos provoquem um processamento infinito, os vértices são marcados assim que são descobertos. A busca em profundidade pode ser utilizada para identificar componentes conexos, verificar a existência de caminhos, detectar ciclos, realizar ordenação topológica em determinados grafos e explorar estruturas de árvores. Quando implementada com listas de adjacência, apresenta complexidade temporal (O(V+E)), em que (V) representa o número de vértices e (E) o número de arestas.
+7. Explicação: O algoritmo de busca em profundidade é utilizado para percorrer grafos, explorando um caminho o mais profundamente possível antes de retornar e investigar outras possibilidades. A partir de um vértice inicial, o algoritmo visita um de seus vizinhos ainda não explorados e continua avançando pelos vértices alcançáveis a partir dele.
+Quando chega a um vértice que não possui vizinhos não visitados, realiza um retrocesso, retornando aos vértices anteriores para procurar caminhos alternativos. Esse comportamento pode ser implementado por meio de recursão, utilizando implicitamente a pilha de chamadas, ou por meio de uma estrutura de dados do tipo pilha, controlada explicitamente. Para evitar visitas repetidas e impedir que ciclos provoquem um processamento infinito, os vértices são marcados assim que são descobertos.
+A busca em profundidade pode ser utilizada para identificar componentes conexos, verificar a existência de caminhos, detectar ciclos, realizar ordenação topológica em determinados grafos e explorar estruturas de árvores. Quando implementada com listas de adjacência, apresenta complexidade temporal (O(V+E)), em que (V) representa o número de vértices e (E) o número de arestas.
+8. Código:#include <stdio.h>
+#include <stdbool.h>
+
+#define N 6
+
+// 6-node undirected graph as an adjacency matrix
+int adj[N][N] = {
+    {0, 1, 1, 0, 0, 0},
+    {1, 0, 0, 1, 1, 0},
+    {1, 0, 0, 0, 0, 1},
+    {0, 1, 0, 0, 0, 0},
+    {0, 1, 0, 0, 0, 1},
+    {0, 0, 1, 0, 1, 0},
+};
+bool visited[N];
+
+void dfs(int node) {
+    visited[node] = true;
+    printf("%d ", node);
+    // Recurse into every unvisited neighbor
+    for (int next = 0; next < N; next++) {
+        if (adj[node][next] && !visited[next]) dfs(next);
+    }
+}
+
+int main() {
+    printf("DFS from node 0: ");
+    dfs(0);
+    printf("\n");
+    return 0;
+}

@@ -5,3 +5,36 @@
 5. Conceitos: grafos, árvores, fila
 6. Problema: Dado um grafo e um vértice inicial, percorrer os vértices alcançáveis visitando primeiro aqueles que estão mais próximos do vértice inicial.
 7. Explicação: O algoritmo de busca em largura é utilizado para percorrer grafos, explorando os vértices a partir de um vértice inicial. Seu funcionamento consiste em visitar primeiro todos os vértices diretamente conectados ao vértice de origem, antes de avançar para aqueles que estão a uma distância maior. Para controlar a ordem de exploração, utiliza uma estrutura de dados do tipo fila, na qual os vértices são processados na mesma ordem em que foram descobertos. Cada vértice é marcado como visitado para evitar que seja processado repetidamente, especialmente quando existem ciclos no grafo. Dessa maneira, a busca avança progressivamente por níveis de distância, permitindo também encontrar caminhos com o menor número de arestas em grafos não ponderados.
+8. Código:#define MAX 100
+
+//Struct para lista ligada
+typedef struct {
+    int items[MAX];
+    int frente;
+    int tras;
+} listaLigada;
+
+void bfs(int grafo[MAX][MAX], int numVertices, int raizVertice) {
+    int visitados[MAX] = {0}; 
+    listaLigada* q = criarListaLigada();
+
+    visitados[raizVertice] = 1;
+    adicionarVertice(q, raizVertice);
+
+    printf("Ordem de visitação da BFS: ");
+
+    while (!taVazia(q)) {
+        int atualVertice = removerVertice(q);
+        printf("%d ", atualVertice);
+
+        for (int i = 0; i < numVertices; i++) {
+            if (grafo[atualVertice][i] == 1 && !visitados[i]) {
+                visitados[i] = 1;
+                adicionarVertice(q, i);
+            }
+        }
+    }
+    printf("\n");
+    
+    free(q);
+}

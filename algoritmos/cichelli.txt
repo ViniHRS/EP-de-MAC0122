@@ -4,4 +4,157 @@
 4. Data: 1980
 5. Conceitos: espalhamento
 6. Problema: Dado um conjunto fixo de palavras, construir uma função de espalhamento que associe cada palavra a uma posição única de uma tabela, minimizando seu tamanho e eliminando colisões.
-7. Explicação: O método de Cichelli é um procedimento utilizado para construir uma função hash perfeita para um conjunto fixo de palavras, especialmente em aplicações nas quais é necessário localizar rapidamente identificadores ou palavras reservadas. Uma função hash perfeita é aquela que associa cada elemento de um conjunto conhecido a uma posição exclusiva da tabela, sem produzir colisões entre os elementos desse conjunto. O método de Cichelli utiliza informações das palavras, particularmente suas letras iniciais e finais, combinadas com seus comprimentos, para calcular os índices correspondentes. Durante a construção da função, são atribuídos valores às letras envolvidas, buscando encontrar uma combinação que produza posições distintas para todas as palavras. Para orientar esse processo, as palavras são consideradas segundo critérios que priorizam aquelas que compartilham letras iniciais ou finais com outras palavras do conjunto. A construção exige testar diferentes atribuições até encontrar uma solução válida. Depois de construída, a função permite calcular diretamente a posição de cada palavra pertencente ao conjunto, dispensando comparações sucessivas com os demais elementos.
+7. Explicação: O método de Cichelli é um procedimento utilizado para construir uma função hash perfeita para um conjunto fixo de palavras, especialmente em aplicações nas quais é necessário localizar rapidamente identificadores ou palavras reservadas. Uma função hash perfeita é aquela que associa cada elemento de um conjunto conhecido a uma posição exclusiva da tabela, sem produzir colisões entre os elementos desse conjunto.
+O método de Cichelli utiliza informações das palavras, particularmente suas letras iniciais e finais, combinadas com seus comprimentos, para calcular os índices correspondentes. Durante a construção da função, são atribuídos valores às letras envolvidas, buscando encontrar uma combinação que produza posições distintas para todas as palavras.
+Para orientar esse processo, as palavras são consideradas segundo critérios que priorizam aquelas que compartilham letras iniciais ou finais com outras palavras do conjunto. A construção exige testar diferentes atribuições até encontrar uma solução válida. Depois de construída, a função permite calcular diretamente a posição de cada palavra pertencente ao conjunto, dispensando comparações sucessivas com os demais elementos.
+8. Código:#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define MAX_PALAVRAS 10
+#define MAX_VALOR_LETRA 10
+
+const char* palavras[MAX_PALAVRAS] = {
+    "auto", "break", "case", "char", "const",
+    "continue", "default", "do", "double", "else"
+};
+
+int freq[26] = {0};
+int g[26]; // Pesos atribuídos a cada letra (a-z)
+bool ocupado[MAX_PALAVRAS] = {false};
+int ordem[MAX_PALAVRAS];
+
+// Calcula o hash usando a fórmula de Cichelli
+int calcular_hash(const char* p) {
+    int len = strlen(p);
+    int primeira = p[0] - 'a';
+    int ultima = p[len - 1] - 'a';
+    return (len + g[primeira] + g[ultima]) % MAX_PALAVRAS;
+}
+
+// Função recursiva com backtracking para atribuir pesos
+bool buscar_pesos(int idx) {
+    if (idx == MAX_PALAVRAS) {
+        return true; // Todas as palavras foram mapeadas sem colisão
+    }
+
+    const char* p = palavras[ordem[idx]];
+    int len = strlen(p);
+    int c1 = p[0] - 'a';
+    int c2 = p[len - 1] - 'a';
+
+    bool c1_definido = (g[c1] != -1);
+    bool c2_definido = (g[c2] != -1);
+
+    // Caso 1: Ambas as letras já têm peso
+    if (c1_definido && c2_definido) {
+        int h = calcular_hash(p);
+        if (!ocupado[h]) {
+            ocupado[h] = true;
+            if (buscar_pesos(idx + 1)) return true;
+            ocupado[h] = false;
+        }
+        return false;
+    }
+
+    // Caso 2: Primeira e última letra são iguais e não definidas
+    if (c1 == c2 && !c1_definido) {
+        for (int v = 0; v <= MAX_VALOR_LETRA; v++) {
+            g[c1] = v;
+            int h = calcular_hash(p);
+            if (!ocupado[h]) {
+                ocupado[h] = true;
+                if (buscar_pesos(idx + 1)) return true;
+                ocupado[h] = false;
+            }
+        }
+        g[c1] = -1;
+        return false;
+    }
+
+    // Caso 3: Apenas a primeira letra não tem peso
+    if (!c1_definido && c2_definido) {
+        for (int v = 0; v <= MAX_VALOR_LETRA; v++) {
+            g[c1] = v;
+            int h = calcular_hash(p);
+            if (!ocupado[h]) {
+                ocupado[h] = true;
+                if (buscar_pesos(idx + 1)) return true;
+                ocupado[h] = false;
+            }
+        }
+        g[c1] = -1;
+        return false;
+    }
+
+    // Caso 4: Apenas a última letra não tem peso
+    if (c1_definido && !c2_definido) {
+        for (int v = 0; v <= MAX_VALOR_LETRA; v++) {
+            g[c2] = v;
+            int h = calcular_hash(p);
+            if (!ocupado[h]) {
+                ocupado[h] = true;
+                if (buscar_pesos(idx + 1)) return true;
+                ocupado[h] = false;
+            }
+        }
+        g[c2] = -1;
+        return false;
+    }
+
+    // Caso 5: Nenhuma das duas letras tem peso definido
+    for (int v1 = 0; v1 <= MAX_VALOR_LETRA; v1++) {
+        g[c1] = v1;
+        for (int v2 = 0; v2 <= MAX_VALOR_LETRA; v2++) {
+            g[c2] = v2;
+            int h = calcular_hash(p);
+            if (!ocupado[h]) {
+                ocupado[h] = true;
+                if (buscar_pesos(idx + 1)) return true;
+                ocupado[h] = false;
+            }
+        }
+    }
+    g[c1] = -1;
+    g[c2] = -1;
+    return false;
+}
+
+int main() {
+    for (int i = 0; i < 26; i++) g[i] = -1;
+
+    // 1. Contar frequência das letras nas extremidades
+    for (int i = 0; i < MAX_PALAVRAS; i++) {
+        int len = strlen(palavras[i]);
+        freq[palavras[i][0] - 'a']++;
+        freq[palavras[i][len - 1] - 'a']++;
+        ordem[i] = i;
+    }
+
+    // 2. Ordenar palavras pela soma das frequências (Bubble Sort simples)
+    for (int i = 0; i < MAX_PALAVRAS - 1; i++) {
+        for (int j = 0; j < MAX_PALAVRAS - i - 1; j++) {
+            const char* p1 = palavras[ordem[j]];
+            const char* p2 = palavras[ordem[j + 1]];
+            int f1 = freq[p1[0] - 'a'] + freq[p1[strlen(p1) - 1] - 'a'];
+            int f2 = freq[p2[0] - 'a'] + freq[p2[strlen(p2) - 1] - 'a'];
+            if (f1 < f2) {
+                int temp = ordem[j];
+                ordem[j] = ordem[j + 1];
+                ordem[j + 1] = temp;
+            }
+        }
+    }
+
+    // 3. Executar backtracking
+    if (buscar_pesos(0)) {
+        printf("Hash perfeito encontrado!\n\n");
+        for (int i = 0; i < MAX_PALAVRAS; i++) {
+            printf("Palavra: %-10s -> Indice: %d\n", palavras[i], calcular_hash(palavras[i]));
+        }
+    } else {
+        printf("Nao foi possivel encontrar um hash perfeito com MAX_VALOR_LETRA = %d.\n", MAX_VALOR_LETRA);
+    }
+
+    return 0;
+}

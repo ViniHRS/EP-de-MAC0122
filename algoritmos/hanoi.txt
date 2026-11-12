@@ -4,4 +4,22 @@
 4. Data: 1883
 5. Conceitos: recursividade, pilha
 6. Problema: Dadas três hastes e n discos de tamanhos distintos, inicialmente empilhados em ordem decrescente de tamanho em uma das hastes, transferir todos os discos para outra haste, utilizando a terceira como auxiliar, respeitando as regras de movimentação.
-7. Explicação: O problema das Torres de Hanói consiste em transferir uma pilha de discos de uma haste de origem para uma haste de destino, utilizando uma terceira haste como auxiliar. Os discos possuem tamanhos distintos e inicialmente estão organizados em ordem decrescente de tamanho, com o maior na base e o menor no topo. Durante a execução, apenas um disco pode ser movimentado por vez, e nunca é permitido colocar um disco maior sobre outro menor. A solução utiliza uma estratégia recursiva para decompor o problema em etapas menores. Para transferir uma pilha com (n) discos, primeiro são transferidos os (n-1) discos superiores para a haste auxiliar, utilizando a haste de destino como apoio. Em seguida, o maior disco é movimentado diretamente para a haste de destino. Por fim, os (n-1) discos que estavam na haste auxiliar são transferidos para o destino, utilizando a haste de origem como apoio. Esse processo é repetido até que reste apenas um disco, que pode ser movimentado diretamente. A quantidade mínima de movimentos necessários para resolver o problema é (2^n-1), demonstrando o crescimento exponencial do número de operações conforme aumenta a quantidade de discos.
+7. Explicação: O problema das Torres de Hanói consiste em transferir uma pilha de discos de uma haste de origem para uma haste de destino, utilizando uma terceira haste como auxiliar. Os discos possuem tamanhos distintos e inicialmente estão organizados em ordem decrescente de tamanho, com o maior na base e o menor no topo.
+Durante a execução, apenas um disco pode ser movimentado por vez, e nunca é permitido colocar um disco maior sobre outro menor. A solução utiliza uma estratégia recursiva para decompor o problema em etapas menores. Para transferir uma pilha com (n) discos, primeiro são transferidos os (n-1) discos superiores para a haste auxiliar, utilizando a haste de destino como apoio. Em seguida, o maior disco é movimentado diretamente para a haste de destino.
+Por fim, os (n-1) discos que estavam na haste auxiliar são transferidos para o destino, utilizando a haste de origem como apoio. Esse processo é repetido até que reste apenas um disco, que pode ser movimentado diretamente. A quantidade mínima de movimentos necessários para resolver o problema é (2^n-1), demonstrando o crescimento exponencial do número de operações conforme aumenta a quantidade de discos.
+8. Código:void hanoi(int n, char origem, char destino, char auxiliar) {
+    // Caso base: se houver apenas 1 disco, mova diretamente
+    if (n == 1) {
+        printf("Mova o disco 1 da base %c para a base %c\n", origem, destino);
+        return;
+    }
+
+    // 1. Mova os n-1 discos da origem para a auxiliar, usando o destino como apoio
+    hanoi(n - 1, origem, auxiliar, destino);
+
+    // 2. Mova o disco maior (disco n) da origem para o destino
+    printf("Mova o disco %d da base %c para a base %c\n", n, origem, destino);
+
+    // 3. Mova os n-1 discos da auxiliar para o destino, usando a origem como apoio
+    hanoi(n - 1, auxiliar, destino, origem);
+}

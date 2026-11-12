@@ -4,4 +4,107 @@
 4. Data: 1956
 5. Conceitos: grafos, árvores, árvore espalhada mínima, conjuntos disjuntos (union-find)
 6. Problema: Dado um grafo não direcionado, conexo e ponderado, determinar sua árvore espalhada mínima.
-7. Explicação: O algoritmo de Kruskal é utilizado para encontrar uma árvore espalhada mínima em um grafo não direcionado, conexo e ponderado. Uma árvore espalhada mínima é uma estrutura que conecta todos os vértices do grafo sem formar ciclos e cuja soma dos pesos das arestas selecionadas é a menor possível. Inicialmente, todas as arestas são organizadas em ordem crescente de peso e cada vértice é considerado um componente separado. Em seguida, o algoritmo examina as arestas nessa ordem, selecionando aquelas que conectam vértices pertencentes a componentes diferentes. Quando uma aresta é selecionada, os componentes correspondentes são unidos, evitando que a estrutura resultante apresente ciclos. Para verificar se dois vértices já pertencem ao mesmo componente e realizar a união entre conjuntos, pode ser utilizada uma estrutura de dados chamada conjuntos disjuntos, também conhecida como Union-Find. O processo continua até que todos os vértices estejam conectados, momento em que uma árvore espalhada mínima terá sido construída. Como uma árvore com (V) vértices possui exatamente (V-1) arestas, o algoritmo termina após selecionar essa quantidade de arestas. Sua estratégia é gulosa, pois escolhe, em cada etapa, a menor aresta disponível que não compromete a formação da árvore.
+7. Explicação: O algoritmo de Kruskal é utilizado para encontrar uma árvore espalhada mínima em um grafo não direcionado, conexo e ponderado. Uma árvore espalhada mínima é uma estrutura que conecta todos os vértices do grafo sem formar ciclos e cuja soma dos pesos das arestas selecionadas é a menor possível. Inicialmente, todas as arestas são organizadas em ordem crescente de peso e cada vértice é considerado um componente separado. Em seguida, o algoritmo examina as arestas nessa ordem, selecionando aquelas que conectam vértices pertencentes a componentes diferentes.
+Quando uma aresta é selecionada, os componentes correspondentes são unidos, evitando que a estrutura resultante apresente ciclos. Para verificar se dois vértices já pertencem ao mesmo componente e realizar a união entre conjuntos, pode ser utilizada uma estrutura de dados chamada conjuntos disjuntos, também conhecida como Union-Find.
+O processo continua até que todos os vértices estejam conectados, momento em que uma árvore espalhada mínima terá sido construída. Como uma árvore com (V) vértices possui exatamente (V-1) arestas, o algoritmo termina após selecionar essa quantidade de arestas. Sua estratégia é gulosa, pois escolhe, em cada etapa, a menor aresta disponível que não compromete a formação da árvore.
+8. Código:// Estrutura para representar uma aresta
+typedef struct {
+    int origem, destino, peso;
+} Aresta;
+
+// Estrutura para representar um grafo
+typedef struct {
+    int V, E; // V = vértices, E = arestas
+    Aresta* arestas;
+} Grafo;
+
+// Estrutura para o Union-Find (Subset)
+typedef struct {
+    int pai;
+    int rank;
+} Substituto;
+
+// Função para criar um grafo
+Grafo* criarGrafo(int V, int E) {
+    Grafo* grafo = (Grafo*)malloc(sizeof(Grafo));
+    grafo->V = V;
+    grafo->E = E;
+    grafo->arestas = (Aresta*)malloc(E * sizeof(Aresta));
+    return grafo;
+}
+
+// Função para encontrar a raiz do conjunto de um elemento i (com compressão de caminho)
+int encontrar(Substituto sub[], int i) {
+    if (sub[i].pai != i)
+        sub[i].pai = encontrar(sub[], sub[i].pai);
+    return sub[i].pai;
+}
+
+// Função para unir dois conjuntos por rank
+void unir(Substituto sub[], int raizX, int raizY) {
+    int xset = encontrar(sub, raizX);
+    int yset = encontrar(sub, raizY);
+
+    if (sub[xset].rank < sub[yset].rank)
+        sub[xset].pai = yset;
+    else if (sub[xset].rank > sub[yset].rank)
+        sub[yset].pai = xset;
+    else {
+        sub[yset].pai = xset;
+        sub[xset].rank++;
+    }
+}
+
+// Função de comparação para ordenar as arestas por peso
+int compararArestas(const void* a, const void* b) {
+    Aresta* a1 = (Aresta*)a;
+    Aresta* a2 = (Aresta*)b;
+    return a1->peso > a2->peso;
+}
+
+
+// Função principal que executa o algoritmo de Kruskal
+void kruskalMST(Grafo* grafo) {
+    int V = grafo->V;
+    Aresta resultado[V]; // Guardará a MST
+    int e = 0; // Índice para 'resultado'
+    int i = 0; // Índice para arestas ordenadas
+
+    // Passo 1: Ordenar todas as arestas em ordem crescente de peso
+    qsort(grafo->arestas, grafo->E, sizeof(Aresta), compararArestas);
+
+    // Alocar memória para os subconjuntos de Union-Find
+    Substituto* sub = (Substituto*)malloc(V * sizeof(Substituto));
+
+    // Criar V subconjuntos com elementos únicos
+    for (int v = 0; v < V; ++v) {
+        sub[v].pai = v;
+        sub[v].rank = 0;
+    }
+
+    // Número de arestas a serem tomadas é igual a V-1
+    while (e < V - 1 && i < grafo->E) {
+        // Passo 2: Pegar a menor aresta e incrementar o índice para a próxima
+        Aresta proximaAresta = grafo->arestas[i++];
+
+        int x = encontrar(sub, proximaAresta.origem);
+        int y = encontrar(sub, proximaAresta.destino);
+
+        // Se incluir esta aresta não formar um ciclo, inclua no resultado
+        if (x != y) {
+            resultado[e++] = proximaAresta;
+            unir(sub, x, y);
+        }
+        // Caso contrário, descarte a aresta
+    }
+
+    printf("Arestas da Arvore Geradora Minima (MST):\n");
+    int custoTotal = 0;
+    for (int j = 0; j < e; ++j) {
+        printf("%d -- %d == %d\n", resultado[j].origem, resultado[j].destino, resultado[j].peso);
+        custoTotal += resultado[j].peso;
+    }
+    printf("Custo total da MST: %d\n", custoTotal);
+
+    free(sub);
+}

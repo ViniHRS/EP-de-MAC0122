@@ -4,4 +4,68 @@
 4. Data: 1959
 5. Conceitos: grafos, caminhos mínimos, distâncias
 6. Problema: Dado um grafo ponderado com arestas de pesos não negativos e um vértice de origem, determinar as menores distâncias entre a origem e os demais vértices, armazenando também os predecessores de cada vértice nos caminhos mínimos.
-7. Explicação: O algoritmo de Dijkstra é utilizado para determinar os caminhos de menor distância entre um vértice de origem e os demais vértices de um grafo ponderado, cujas arestas possuem pesos não negativos. Inicialmente, atribui distância zero ao vértice de origem e distância infinita aos demais vértices, indicando que ainda não foi encontrado um caminho até eles. Em seguida, seleciona o vértice não processado que apresenta a menor distância conhecida e examina suas arestas. Para cada vizinho, verifica se o caminho que passa pelo vértice selecionado produz uma distância menor do que aquela registrada anteriormente. Caso isso aconteça, atualiza a distância do vizinho e registra o vértice atual como seu predecessor, permitindo reconstruir posteriormente os caminhos mínimos encontrados. Depois de processar suas conexões, o vértice é considerado definitivamente visitado. O procedimento continua até que todos os vértices alcançáveis tenham sido processados ou até que não existam mais vértices com distâncias finitas a serem examinados. O algoritmo utiliza uma estratégia gulosa, pois sempre escolhe o vértice não processado com a menor distância conhecida. Sua eficiência depende da estrutura utilizada para selecionar esse vértice, podendo apresentar complexidades diferentes conforme a implementação.
+7. Explicação: O algoritmo de Dijkstra é utilizado para determinar os caminhos de menor distância entre um vértice de origem e os demais vértices de um grafo ponderado, cujas arestas possuem pesos não negativos. Inicialmente, atribui distância zero ao vértice de origem e distância infinita aos demais vértices, indicando que ainda não foi encontrado um caminho até eles. Em seguida, seleciona o vértice não processado que apresenta a menor distância conhecida e examina suas arestas.
+Para cada vizinho, verifica se o caminho que passa pelo vértice selecionado produz uma distância menor do que aquela registrada anteriormente. Caso isso aconteça, atualiza a distância do vizinho e registra o vértice atual como seu predecessor, permitindo reconstruir posteriormente os caminhos mínimos encontrados. Depois de processar suas conexões, o vértice é considerado definitivamente visitado.
+O procedimento continua até que todos os vértices alcançáveis tenham sido processados ou até que não existam mais vértices com distâncias finitas a serem examinados. O algoritmo utiliza uma estratégia gulosa, pois sempre escolhe o vértice não processado com a menor distância conhecida. Sua eficiência depende da estrutura utilizada para selecionar esse vértice, podendo apresentar complexidades diferentes conforme a implementação.
+8. Código:#include <stdio.h>
+#include <limits.h>
+#include <stdbool.h>
+
+#define V 5 // Número de vértices do grafo
+
+// Função para encontrar o vértice com a menor distância que ainda não foi incluído na árvore de caminho mínimo
+int minDistance(int dist[], bool sptSet[]) {
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < V; v++) {
+        if (!sptSet[v] && dist[v] <= min) {
+            min = dist[v];
+            min_index = v;
+        }
+    }
+
+    return min_index;
+}
+
+// Função para exibir o vetor de distâncias calculado
+void printSolution(int dist[], int n) {
+    printf("Vértice \t Distância da Origem\n");
+    for (int i = 0; i < V; i++) {
+        printf("  %d \t\t\t %d\n", i, dist[i]);
+    }
+}
+
+// Implementação do Algoritmo de Dijkstra
+void dijkstra(int graph[V][V], int src) {
+    int dist[V];      // Armazena a menor distância da origem até o vértice i
+    bool sptSet[V];   // True se o vértice i já estiver incluído no caminho mínimo
+
+    // Inicializa todas as distâncias como infinito e sptSet como falso
+    for (int i = 0; i < V; i++) {
+        dist[i] = INT_MAX;
+        sptSet[i] = false;
+    }
+
+    // A distância do vértice de origem para ele mesmo é sempre 0
+    dist[src] = 0;
+
+    // Encontra o caminho mais curto para todos os vértices
+    for (int count = 0; count < V - 1; count++) {
+        // Escolhe o vértice com a menor distância do conjunto de não processados
+        int u = minDistance(dist, sptSet);
+
+        // Marca o vértice como processado
+        sptSet[u] = true;
+
+        // Atualiza a distância dos vértices adjacentes ao vértice escolhido
+        for (int v = 0; v < V; v++) {
+            // Atualiza dist[v] apenas se não estiver em sptSet, houver uma aresta de u para v,
+            // e o peso total do caminho até v através de u for menor que o valor atual de dist[v]
+            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+
+    printSolution(dist, V);
+}
