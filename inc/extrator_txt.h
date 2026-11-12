@@ -1,9 +1,14 @@
 #ifndef EXTRATOR_TXT_H
 #define EXTRATOR_TXT_H
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
 typedef struct {
     char *tecnica;
@@ -13,19 +18,25 @@ typedef struct {
     char *conceitos;
     char *problema;
     char *solucao;
-    char nome_arquivo_html[128];
+    char *arquivo;   /* nome do .txt sem extensão */
+    char *slug;      /* usado no nome do .html */
 } DadosTXT;
 
-#define MAX_ITEMS 100
-
 typedef struct {
-    DadosTXT itens[MAX_ITEMS];
-    int total;
-} ColecaoDados;
+    char *nome;
+    char *explicacao;
+    char *arquivo;
+    char *slug;
+} DadosConceito;
 
-// Declarações de função
-char* limpar_string(char *str);
+char *limpar_string(char *str);
 void anexar_solucao(char **solucao_atual, const char *nova_linha);
 void processar_linha_txt(const char *linha, DadosTXT *dados);
+void processar_linha_conceito(const char *linha, DadosConceito *dados);
+
+int carregar_algoritmos(const char *diretorio, DadosTXT **algoritmos, size_t *quantidade);
+int carregar_conceitos(const char *diretorio, DadosConceito **conceitos, size_t *quantidade);
+void liberar_algoritmos(DadosTXT *algoritmos, size_t quantidade);
+void liberar_conceitos(DadosConceito *conceitos, size_t quantidade);
 
 #endif

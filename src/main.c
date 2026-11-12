@@ -1,87 +1,105 @@
+#include <dirent.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include "html_tags.h"
 #include "extrator_txt.h"
+#include "indexador.h"
 
-// Protótipos
-void style_css(FILE *fp);
-void main_page_html(FILE *fp);
-void gerar_todas_as_paginas_indices(ColecaoDados *colecao);
-
-#define MAX_ITEMS 100
-
-// Função auxiliar para ler uma pasta específica
-void processar_pasta(const char *nome_pasta, ColecaoDados *colecao) {
-    DIR *dir = opendir(nome_pasta);
-    if (dir != NULL) {
-        struct dirent *entry;
-        while ((entry = readdir(dir)) != NULL) {
-            if (strstr(entry->d_name, ".txt") != NULL) {
-                char caminho_completo[512];
-                snprintf(caminho_completo, sizeof(caminho_completo), "%s/%s", nome_pasta, entry->d_name);
-
-                FILE *txt_file = fopen(caminho_completo, "r");
-                if (txt_file != NULL) {
-                    DadosTXT dados = {0};
-                    char linha[1024];
-
-                    while (fgets(linha, sizeof(linha), txt_file) != NULL) {
-                        processar_linha_txt(linha, &dados);
-                    }
-                    fclose(txt_file);
-
-                    // ---> ADICIONA ESTAS DUAS LINHAS AQUI <---
-                    // Transforma o nome do txt (ex: selection_sort.txt) em html (ex: selection_sort.html)
-                    snprintf(dados.nome_arquivo_html, sizeof(dados.nome_arquivo_html), "item_%d.html", colecao->total);
-                    // Ou, se preferires usar o nome exato do ficheiro txt trocando a extensão:
-                    // snprintf(dados.nome_arquivo_html, sizeof(dados.nome_arquivo_html), "%.*s.html", (int)(strlen(entry->d_name) - 4), entry->d_name);
-
-                    if (colecao->total < MAX_ITEMS) {
-                        colecao->itens[colecao->total++] = dados;
-                        printf("Lido com sucesso [%s]: %s -> gerará %s\n", nome_pasta, entry->d_name, dados.nome_arquivo_html);
-                    }
-                }
-            }
-        }
-        closedir(dir);
-    } else {
-        printf("Aviso: Não foi possível abrir a pasta '%s'\n", nome_pasta);
-    }
+static int criar_diretorio(const char *caminho)
+{
+    return (mkdir(caminho, 0777) == 0 || errno == EEXIST) ? 0 : -1;
 }
 
-int main(void) {
-    // 1. Criar a pasta de saída gerada
-    if (mkdir("generated", 0777) == -1) {}
+/* Remove os .html de execuções anteriores para não sobrar página órfã. */
+static void limpar_paginas_antigas(const char *diretorio)
+{
+    DIR *pasta = opendir(diretorio);
+    struct dirent *entrada;
 
-    // 2. Gerar o CSS global
-    FILE *css_fp = fopen("generated/style.css", "w");
-    if (css_fp != NULL) {
-        style_css(css_fp);
-        fclose(css_fp);
+    if (pasta == NULL) return;
+
+    while ((entrada = readdir(pasta)) != NULL) {
+        size_t t = strlen(entrada->d_name);
+        char caminho[1200];
+
+        if (t < 5 || strcmp(entrada->d_name + t - 5, ".html") != 0) continue;
+        snprintf(caminho, sizeof(caminho), "%s/%s", diretorio, entrada->d_name);
+        remove(caminho);
+    }
+    closedir(pasta);
+}
+
+int main(int argc, char **argv)
+{
+    const char *dir_alg = argc > 1 ? argv[1] : "algoritmos";
+    const char *dir_con = argc > 2 ? argv[2] : "conceitos";
+    DadosTXT *algoritmos = NULL;
+    DadosConceito *conceitos = NULL;
+    size_t qa = 0, qc = 0;
+    int erro = 0;
+    FILE *fp;
+
+    if (argc > 3) {
+        fprintf(stderr, "Uso: %s [pasta_algoritmos] [pasta_conceitos]\n", argv[0]);
+        return 1;
     }
 
-    // 3. Inicializar a coleção
-    ColecaoDados colecao = {0};
-
-    // 4. Ler os ficheiros de ambas as pastas
-    processar_pasta("algoritmos", &colecao);
-    processar_pasta("conceitos", &colecao);
-
-    // 5. Gerar o index.html principal
-    FILE *html_fp = fopen("generated/index.html", "w");
-    if (html_fp != NULL) {
-        main_page_html(html_fp);
-        fclose(html_fp);
+    /* 1. Ler os TXT */
+    if (carregar_algoritmos(dir_alg, &algoritmos, &qa) != 0) {
+        fprintf(stderr, "Não foi possível abrir a pasta de algoritmos: %s\n", dir_alg);
+        return 1;
+    }
+    if (carregar_conceitos(dir_con, &conceitos, &qc) != 0) {
+        fprintf(stderr, "Não foi possível abrir a pasta de conceitos: %s\n", dir_con);
+        liberar_algoritmos(algoritmos, qa);
+        return 1;
     }
 
-    // 6. Gerar as 6 páginas de índices dinâmicos
-    gerar_todas_as_paginas_indices(&colecao);
+    /* 2. Pasta de saída */
+    if (criar_diretorio(DIR_SAIDA) != 0) {
+        perror("Não foi possível criar a pasta de saída");
+        liberar_algoritmos(algoritmos, qa);
+        liberar_conceitos(conceitos, qc);
+        return 1;
+    }
+    limpar_paginas_antigas(DIR_SAIDA);
 
-    printf("\nSite gerado com sucesso na pasta 'generated/' com base nas pastas 'algoritmos/' e 'conceitos/'!\n");
+    /* 3. CSS global */
+    fp = fopen(DIR_SAIDA "/style.css", "w");
+    if (fp != NULL) {
+        style_css(fp);
+        fclose(fp);
+    } else {
+        perror(DIR_SAIDA "/style.css");
+        erro = 1;
+    }
 
-    return 0;
+    /* 4. index.html */
+    fp = fopen(DIR_SAIDA "/index.html", "w");
+    if (fp != NULL) {
+        main_page_html(fp, qa, qc);
+        fclose(fp);
+    } else {
+        perror(DIR_SAIDA "/index.html");
+        erro = 1;
+    }
+
+    /* 5. Categorias, tags, algoritmos, glossário e conceitos */
+    if (!erro && gerar_paginas_indices(algoritmos, qa, conceitos, qc) != 0) erro = 1;
+
+    if (!erro) {
+        printf("Site gerado em '%s/'.\n", DIR_SAIDA);
+        printf("Algoritmos carregados: %zu\n", qa);
+        printf("Conceitos carregados: %zu\n", qc);
+        if (qa == 0 || qc == 0) {
+            printf("Aviso: confira se os arquivos TXT foram colocados nas pastas de entrada.\n");
+        }
+    }
+
+    liberar_algoritmos(algoritmos, qa);
+    liberar_conceitos(conceitos, qc);
+    return erro ? 1 : 0;
 }
